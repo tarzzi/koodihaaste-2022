@@ -1,5 +1,4 @@
 <script>
-  export let name;
   export let hp;
   export let atk;
   export let def;
@@ -9,7 +8,9 @@
   export let color;
 
   function calcAttackSpeed(atk, def, gre) {
-    let speed = atk + def + gre;
+    let speed = (atk + def + gre);
+    speed = parseFloat(speed.toFixed(2));
+    console.log(speed);
     return speed;
   }
 </script>
@@ -17,7 +18,6 @@
 <div class="fruit">
   <img class="{color}" alt="wannabefruit" src="https://placekitten.com/200/{rng}" />
   <p class="fruit-stats" style="text-align:left;">
-    <span class="fruit-title">{name}</span><br />
     <span class="fruit-stat fruit-stat-hp">HP {hp}</span><br />
     <span class="fruit-stat fruit-stat-atk">ATK {atk}</span><br />
     <span class="fruit-stat fruit-stat-def">DEF {def}</span><br />
@@ -61,6 +61,7 @@
     font-weight: 800;
   }
   .fruit-stats{
+    margin-top: 15px;
     padding: 15px;
   }
   .fruit-stat {
