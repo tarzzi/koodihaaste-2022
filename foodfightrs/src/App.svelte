@@ -2,17 +2,14 @@
   import { each } from "svelte/internal";
 
   import Fruit from "./lib/Fruit.svelte";
-
+  import Battle from "./lib/Battle.svelte"
   let selectedL;
   let selectedR;
-  let rhp;
-  let ratk;
-  let rdef;
-  let rgre;
-  let lhp;
-  let latk;
-  let ldef;
-  export let lgre;
+  let rFruit;
+  let lFruit;
+  let battle;
+
+  const startBattle =() => battle.start();
 
   let fruits = [
     {
@@ -24,6 +21,7 @@
         def: 4,
         gre: 0.6,
       },
+      imgUrl:"https://www.collinsdictionary.com/images/full/apple_158989157.jpg"
     },
     {
       id: 1,
@@ -34,6 +32,7 @@
         def: 5,
         gre: 0.6,
       },
+      imgUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbpHnwBb8iuyggb-F5VFYa6FR4FgV7ksiveEhC8RVKA&s"
     },
     {
       id: 2,
@@ -44,6 +43,7 @@
         def: 10,
         gre: 0.8,
       },
+      imgUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-sWAabVWJFCcdZq7CuFb1OcdFYXRFxJSoyg&usqp=CAU"
     },
     {
       id: 3,
@@ -54,6 +54,7 @@
         def: 7,
         gre: 0.2,
       },
+      imgUrl:"https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/d5/24/d5243019-e0fc-4b3c-8cdb-48e22f38bff2/istock-183380744.jpg"
     },
     {
       id: 4,
@@ -64,6 +65,7 @@
         def: 1,
         gre: 0.5,
       },
+      imgUrl:"https://img.freepik.com/free-vector/vintage-pear-illustration_53876-112720.jpg?w=2000"
     },
   ];
 
@@ -77,24 +79,23 @@
     });
 
     let fruit = fruits[index].stats;
+    let imgSrc = fruits[index].imgUrl;
+    let speed = (fruit.atk + fruit.def + fruit.gre);
+    speed = parseFloat(speed.toFixed(2));
+    console.log(speed);
 
     if (option) {
-      rhp = fruit.hp;
-      ratk = fruit.atk;
-      rdef = fruit.def;
-      rgre = fruit.gre;
+      rFruit = [fruit.hp, fruit.atk, fruit.def, speed, imgSrc];
     } else {
-      lhp = fruit.hp;
-      latk = fruit.atk;
-      ldef = fruit.def;
-      lgre = fruit.gre;
+      lFruit = [fruit.hp, fruit.atk, fruit.def, speed, imgSrc];
     }
   }
 </script>
 
 <main>
-  <h1>FooD FighTRS</h1>
-
+  <h1>VFL</h1>
+  <h3>Veggie Fighters League</h3>
+  <h2>Select your champions</h2>
   <div class="grid">
     <div class="card">
       <select
@@ -106,7 +107,7 @@
         {/each}
       </select>
       <h2>{selectedL}</h2>
-      <Fruit color="red" hp={lhp} atk={latk} def={ldef} gre={lgre} rng="202" />
+      <Fruit color="red" hp={lFruit[0]} atk={lFruit[1]} def={lFruit[2]} speed={lFruit[3]} imgSrc={lFruit[4]}/>
     </div>
     <div class="card" style="font-weight:bolder;font-size:28px;">VS.</div>
     <div class="card">
@@ -119,15 +120,24 @@
         {/each}
       </select>
       <h2>{selectedR}</h2>
-      <Fruit color="blue" hp={rhp} atk={ratk} def={rdef} gre={rgre} rng="202" />
+      <Fruit color="blue" hp={rFruit[0]} atk={rFruit[1]} def={rFruit[2]} speed={rFruit[3]} imgSrc={rFruit[4]}/>
     </div>
   </div>
+  <hr>
+  <Battle bind:this={battle} lFruit={lFruit} rFruit={rFruit} />
 </main>
 
 <style>
+  h1{
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
   h2,
   select {
     text-transform: uppercase;
+  }
+  h3{
+    font-style: italic;
   }
   .grid {
     display: grid;

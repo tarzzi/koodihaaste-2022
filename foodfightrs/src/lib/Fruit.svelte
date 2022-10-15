@@ -2,21 +2,15 @@
   export let hp;
   export let atk;
   export let def;
-  export let gre;
-  export let speed = calcAttackSpeed(atk, def, gre);
-  export let rng;
+  export let speed;
   export let color;
+  export let imgSrc;
 
-  function calcAttackSpeed(atk, def, gre) {
-    let speed = (atk + def + gre);
-    speed = parseFloat(speed.toFixed(2));
-    console.log(speed);
-    return speed;
-  }
+
 </script>
 
 <div class="fruit">
-  <img class="{color}" alt="wannabefruit" src="https://placekitten.com/200/{rng}" />
+  <img class="{color}" alt="wannabefruit" src="{imgSrc}" />
   <p class="fruit-stats" style="text-align:left;">
     <span class="fruit-stat fruit-stat-hp">HP {hp}</span><br />
     <span class="fruit-stat fruit-stat-atk">ATK {atk}</span><br />
@@ -29,6 +23,9 @@
   * {
     margin: 0;
     padding: 0;
+  }
+  span{
+    font-size:20px;
   }
   img {
     border-radius: 50%;
@@ -61,7 +58,7 @@
     font-weight: 800;
   }
   .fruit-stats{
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 15px;
   }
   .fruit-stat {
