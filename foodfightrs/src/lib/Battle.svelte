@@ -1,5 +1,4 @@
 <script>
-  import { loop_guard } from "svelte/internal";
 
   // Get selected fruits
   export let lFruit;
@@ -8,26 +7,16 @@
   let time = 0;
   let timer;
   let battleLog = [];
-  let fightStatus = "BEGIN!";
+  let fightStatus = "FIGHT!";
 
   // Get battle stats
-  let lHp;
-  let lAtk;
-  let lDef;
-  let lSpeed;
-  let lImgSrc;
+  let leftChamp;
+  let rightChamp;
+
+  let rigthAttackSpeed;
+  let leftAttackSpeed;
   let lName;
 
-  let rHp;
-  let rAtk;
-  let rDef;
-  let rSpeed;
-  let rImgSrc;
-  let rName;
-
-  // Get battle log
-  let battleLogEl = document.getElementById("log");
-  let btnActionEl = document.getElementById("btn-action");
 
   //Attack counters
 
@@ -35,25 +24,22 @@
   let rAttackCount = 1;
 
   function startBattle() {
-    lHp = lFruit[0];
-    lAtk = lFruit[1];
-    lDef = lFruit[2];
-    lSpeed = lFruit[3];
-    lImgSrc = lFruit[4];
-    lName = lFruit[5];
+    leftChamp = lFruit;
+    leftAttackSpeed = lFruit.stats.atk + lFruit.stats.def + lFruit.stats.gre;
+    lName = lFruit.name;
 
-    rHp = rFruit[0];
-    rAtk = rFruit[1];
-    rDef = rFruit[2];
-    rSpeed = rFruit[3];
-    rImgSrc = rFruit[4];
-    rName = rFruit[5];
+    rightChamp = rFruit;
+    rigthAttackSpeed = rFruit.stats.atk + rFruit.stats.def + rFruit.stats.gre;
+    rightChamp.name = rFruit.name;
 
     battleLog = [];
     let btnActionEl = document.getElementById("btn-action");
     btnActionEl.disabled = true;
+    console.log("L hp",leftChamp.stats.hp);
     battleLog.push({ text: `Tick 00 :: Battle started!` });
+    console.log("Original stats", lFruit, rFruit);
 
+    console.log("ChampionStats", leftChamp, rightChamp);
     // Start battle
     timer = setInterval(() => {
       time++;
@@ -64,19 +50,25 @@
 
   // Run battle
   function tickBattle() {
-    // lSpeed and Rspeed define when attack happens
+    // leftAttackSpeed and rigthAttackSpeed define when attack happens
     // if timer is over multiple of speed, attack happens
 
+    let red = "";
+    let blue = "";
+    if (rightChamp.name === lName) {
+      red = "🟥";
+      blue = "🟦";
+    }
     // Match Ends
-    if (lHp <= 0 || rHp <= 0) {
-      if (lHp <= 0) {
+    if (lFruit.stats.hp <= 0 || rightChamp.stats.hp <= 0) {
+      if (lFruit.stats.hp <= 0) {
         battleLog.push({
-          text: `Tick ${time} :: ${lName} has been defeated! 🏆Victory for ${rName}🏆!`,
+          text: `Tick ${time} :: ${lName} has been defeated! 🏆Victory for ${blue}${rightChamp.name}🏆!`,
           color: "green",
         });
       } else {
         battleLog.push({
-          text: `Tick ${time} :: ${rName} has been defeated! 🏆Victory for ${lName}🏆!`,
+          text: `Tick ${time} :: ${rightChamp.name} has been defeated! 🏆Victory for ${red}${lName}🏆!`,
           color: "green",
         });
       }
@@ -88,40 +80,40 @@
     }
 
     // Attack loops
-    if (time >= lAttackCount * lSpeed) {
+    if (time >= lAttackCount * leftAttackSpeed) {
       let calculatedCrit = calculateCrit();
       let crit = calculatedCrit[0];
       let critStatus = calculatedCrit[1];
       let displayColor = calculatedCrit[2];
 
-      let damage = lAtk * crit - rDef;
+      let damage = lFruit.stats.atk * crit - rightChamp.stats.def;
       if (damage < 0) {
         damage = 0;
       }
-      rHp -= damage;
-      battleLog.push({
-        text: `Tick ${time} :: ${lName} attacks ${rName} for ${damage} damage ${critStatus}`,
+      rightChamp.stats.hp -= damage;
+      let logItem = {
+        text: `Tick ${time} :: ${red}${lName} attacks ${blue}${rightChamp.name} for ${damage} damage ${critStatus}`,
         color: displayColor,
-      });
-      battleLog = battleLog;
+      };
+      battleLog = [...battleLog, logItem];
       lAttackCount++;
     }
-    if (time >= rAttackCount * rSpeed) {
+    if (time >= rAttackCount * rigthAttackSpeed) {
       let calculatedCrit = calculateCrit();
       let rCrit = calculatedCrit[0];
       let rCritStatus = calculatedCrit[1];
       let displayColor = calculatedCrit[2];
 
-      let damage = rAtk * rCrit - lDef;
+      let damage = rightChamp.stats.atk * rCrit - lFruit.stats.def;
       if (damage < 0) {
         damage = 0;
       }
-      lHp -= damage;
-      battleLog.push({
-        text: `Tick ${time} :: ${rName} attacks ${lName} for ${damage} damage ${rCritStatus}`,
+      lFruit.stats.hp -= damage;
+      let logItem = {
+        text: `Tick ${time} :: ${blue}${rightChamp.name} attacks ${red}${lName} for ${damage} damage ${rCritStatus}`,
         color: displayColor,
-      });
-      battleLog = battleLog;
+      };
+      battleLog = [...battleLog, logItem];
       rAttackCount++;
     }
   }
@@ -133,7 +125,9 @@
     lAttackCount = 1;
     rAttackCount = 1;
     time = 0;
-    fightStatus = "BEGIN!";
+    leftChamp = null;
+    rightChamp = null;
+    fightStatus = "FIGHT!";
   }
 
   function calculateCrit() {
@@ -159,8 +153,9 @@
     return [crit, critStatus, displayColor];
   }
 </script>
+
 <div class="center">
-<button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
+  <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
 </div>
 <div id="battle-log">
   <!-- Show battle log -->
@@ -179,8 +174,35 @@
   button {
     margin-bottom: 1em;
   }
+
+  button {
+    border-radius: 8px;
+    color: rgb(78, 78, 78);
+    border: 1px solid gray;
+    padding: 0.6em 1.2em;
+    font-size: 1.5em;
+    font-weight: 800;
+    font-family: monospace;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    transition: box-shadow 200ms;
+  }
+  button:hover {
+    border-color: #646cff;
+    box-shadow: 5px 5px 5px rgb(156, 156, 156);
+    color: black;
+  }
+  button:active {
+    box-shadow: 2px 2px 2px rgb(156, 156, 156);
+    color: rgb(43, 43, 43);
+  }
+  /* 
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+} */
+
   #battle-log {
-    width: 100%;
     height: auto;
     background-color: #000;
     color: #fff;
@@ -193,7 +215,7 @@
     overflow: auto;
     text-align: left;
   }
-  .center{
+  .center {
     display: grid;
     grid-template-columns: auto;
   }

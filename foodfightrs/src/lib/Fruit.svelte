@@ -8,10 +8,9 @@
 
 
 </script>
-
 <div class="fruit">
   <img class="{color}" alt="wannabefruit" src="{imgSrc}" />
-  <p class="fruit-stats" style="text-align:left;">
+  <p class="fruit-stats">
     <span class="fruit-stat fruit-stat-hp">HP {hp}</span><br />
     <span class="fruit-stat fruit-stat-atk">ATK {atk}</span><br />
     <span class="fruit-stat fruit-stat-def">DEF {def}</span><br />
@@ -24,6 +23,9 @@
     margin: 0;
     padding: 0;
   }
+  p{
+    text-align: left;
+  }
   span{
     font-size:20px;
   }
@@ -32,23 +34,29 @@
     box-shadow: 5px 5px 1em rgb(255, 255, 255), -5px -5px 1em rgb(255, 255, 255);
     width: 152px;
     height: 152px;
-    right: -75px;
+    right: -25px;
     top: -1px;
     position: absolute;
     will-change: filter;
     transition: filter 200ms;
   }
+ 
   .blue:hover {
     transition: filter 200ms;
     filter: drop-shadow(0 0 2em #646cffaa);
+  }
+  .blue div img{
+    right: 0;
+    left: -25px;
+  }
+  .blue div p{
+    text-align:right;
   }
   .red:hover {
     transition: filter 200ms;
     filter: drop-shadow(0 0 2em #ff3e00aa);
   }
   .fruit {
-    border: 1px solid black;
-    border-right: 0; 
     margin: 0 auto;
     width: 300px;
     position: relative;

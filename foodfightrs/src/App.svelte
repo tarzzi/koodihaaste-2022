@@ -1,14 +1,18 @@
 <script>
   import Title from "./Title.svelte";
-
   import { each } from "svelte/internal";
-
   import Fruit from "./lib/Fruit.svelte";
   import Battle from "./lib/Battle.svelte";
   let selectedL;
   let selectedR;
   let rFruit;
   let lFruit;
+
+  let mainBlue = "#1e90ff";
+  let mainRed = "#ff1e1e";
+
+  let indexL = 0;
+  let indexR = 0;
 
   let fruits = [
     {
@@ -74,7 +78,48 @@
   ];
 
   handleChange(0, "Apple");
-  handleChange(1, "Apple");
+
+  lFruit = fruits[0];
+  rFruit = fruits[0];
+  selectedR = fruits[0].name;
+
+  function nextItem(isRight, isMoveRight) {
+    if(!isRight){
+      if (isMoveRight) {
+      indexL++;
+      if (indexL > fruits.length - 1) {
+        indexL = 0;
+      }
+    } else {
+      indexL--;
+      if (indexL < 0) {
+        indexL = fruits.length - 1;
+      }
+    }
+    lFruit = fruits[indexL];
+    selectedL = lFruit.name;
+    
+    }
+    else{
+      if (isMoveRight) {
+        console.log("next right");
+      indexR++;
+      if (indexR > fruits.length - 1) {
+        indexR = 0;
+      }
+    } else {
+      indexR--;
+      if (indexR < 0) {
+        indexR = fruits.length - 1;
+      }
+    }
+    console.log("index:",indexR," fruit name:",fruits[indexR]);
+    rFruit = fruits[indexR];
+    selectedR = rFruit.name;
+    
+    }
+
+  }
 
   function handleChange(option, value) {
     let index = fruits.findIndex((object) => {
@@ -112,42 +157,30 @@
   <Title />
   <div class="grid">
     <div class="card red">
-      <select
-        bind:value={selectedL}
-        on:change={() => handleChange(0, selectedL)}
-      >
-        {#each fruits as fruit}
-          <option name={fruit.name}>{fruit.name}</option>
-        {/each}
-      </select>
-      <h2>{selectedL}</h2>
+      <button class="btn-left" on:click={()=>nextItem(0,0)}>←</button>
+      <h2>{lFruit.name}</h2>
+      <button type="button" class="btn-right" on:click={()=>nextItem(0,1)}>→</button>
       <Fruit
         color="red"
-        hp={lFruit[0]}
-        atk={lFruit[1]}
-        def={lFruit[2]}
-        speed={lFruit[3]}
-        imgSrc={lFruit[4]}
+        hp={lFruit.stats.hp}
+        atk={lFruit.stats.atk}
+        def={lFruit.stats.def}
+        speed={lFruit.stats.atk + lFruit.stats.def + lFruit.stats.gre}
+        imgSrc={lFruit.imgUrl}
       />
     </div>
-    <div class="card center" style="font-weight:bolder;font-size:28px;">VS.</div>
+    <div class="card center" style="font-weight:bolder;font-size:28px;">VS</div>
     <div class="card blue">
-      <select
-        bind:value={selectedR}
-        on:change={() => handleChange(1, selectedR)}
-      >
-        {#each fruits as fruit}
-          <option name={fruit.name}>{fruit.name}</option>
-        {/each}
-      </select>
-      <h2>{selectedR}</h2>
+      <button class="btn-left" on:click={()=>nextItem(1,0)}>←</button>
+      <h2>{rFruit.name}</h2>
+      <button type="button" class="btn-right" on:click={()=>nextItem(1,1)}>→</button>
       <Fruit
         color="blue"
-        hp={rFruit[0]}
-        atk={rFruit[1]}
-        def={rFruit[2]}
-        speed={rFruit[3]}
-        imgSrc={rFruit[4]}
+        hp={rFruit.stats.hp}
+        atk={rFruit.stats.atk}
+        def={rFruit.stats.def}
+        speed={rFruit.stats.atk + rFruit.stats.def + rFruit.stats.gre}
+        imgSrc={rFruit.imgUrl}
       />
     </div>
   </div>
@@ -155,38 +188,46 @@
 </main>
 
 <style>
-  h2,
-  select {
+  :root{
+  --mainBlue: #1e90ff;
+  --mainRed: #ff1e1e;
+  }
+  h2{
     text-transform: uppercase;
+    display: inline;
   }
   .grid {
     display: grid;
     grid-template-columns: auto auto auto;
+    border: solid 1px black;
   }
-  select {
-    padding: 5px 15px;
-    padding-right: 25px;
-    font-size: 20px;
-  }
-  option {
-    padding: 5px 0;
+  button{
+    padding: 5px 10px;
+  font-family: monospace;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 2em;
   }
   .red{
-    background-color: red;
+    background-color:  var(--mainRed);
+    text-shadow: 0 0 10px black;
     color: white;
   }
   .blue{
-    background-color: blue;
+    background-color:  var(--mainBlue);
+    text-shadow: 0 0 10px black;
     color: white;
   }
   .center{
     color: white;
+    text-shadow: 0 0 10px black;
     background: linear-gradient(
     to right,
-    red 0%,
-    red 50%,
-    blue 50%,
-    blue 100%
+    var(--mainRed) 0%,
+    var(--mainRed) 50%,
+    var(--mainBlue) 50%,
+    var(--mainBlue) 100%
   );
   }
 </style>
