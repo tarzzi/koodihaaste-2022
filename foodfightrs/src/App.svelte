@@ -17,7 +17,7 @@
       name: "apple",
       stats: {
         hp: 42,
-        atk: 5,
+        atk: 12,
         def: 4,
         gre: 0.6,
       },
@@ -28,7 +28,7 @@
       name: "tomato",
       stats: {
         hp: 36,
-        atk: 7,
+        atk: 17,
         def: 5,
         gre: 0.6,
       },
@@ -39,7 +39,7 @@
       name: "cucumber",
       stats: {
         hp: 29,
-        atk: 4,
+        atk: 10,
         def: 10,
         gre: 0.8,
       },
@@ -50,7 +50,7 @@
       name: "banana",
       stats: {
         hp: 25,
-        atk: 2,
+        atk: 19,
         def: 7,
         gre: 0.2,
       },
@@ -61,8 +61,8 @@
       name: "pear",
       stats: {
         hp: 46,
-        atk: 7,
-        def: 1,
+        atk: 12,
+        def: 4,
         gre: 0.5,
       },
       imgUrl:"https://img.freepik.com/free-vector/vintage-pear-illustration_53876-112720.jpg?w=2000"
@@ -85,9 +85,9 @@
     console.log(speed);
 
     if (option) {
-      rFruit = [fruit.hp, fruit.atk, fruit.def, speed, imgSrc];
+      rFruit = [fruit.hp, fruit.atk, fruit.def, speed, imgSrc, fruits[index].name];
     } else {
-      lFruit = [fruit.hp, fruit.atk, fruit.def, speed, imgSrc];
+      lFruit = [fruit.hp, fruit.atk, fruit.def, speed, imgSrc, fruits[index].name];
     }
   }
 </script>
@@ -124,7 +124,7 @@
     </div>
   </div>
   <hr>
-  <Battle bind:this={battle} lFruit={lFruit} rFruit={rFruit} />
+  <Battle lFruit={lFruit} rFruit={rFruit} />
 </main>
 
 <style>
