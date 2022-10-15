@@ -4,6 +4,7 @@
   // Get selected fruits
   export let lFruit;
   export let rFruit;
+  export let gameTickSetting = 20;
   let time = 0;
   let timer;
   let battleLog = [];
@@ -48,19 +49,17 @@
     rImgSrc = rFruit[4];
     rName = rFruit[5];
 
-    console.log("Staring battle with fruits: ", lFruit, rFruit);
     battleLog = [];
-    let battleLogEl = document.getElementById("log");
     let btnActionEl = document.getElementById("btn-action");
     btnActionEl.disabled = true;
-    battleLog.push(`Tick 00 :: Battle started!`);
+    battleLog.push({ text: `Tick 00 :: Battle started!` });
 
     // Start battle
     timer = setInterval(() => {
       time++;
       fightStatus = `Fighting ... ${time}`;
       tickBattle();
-    }, 20);
+    }, gameTickSetting);
   }
 
   // Run battle
@@ -71,13 +70,15 @@
     // Match Ends
     if (lHp <= 0 || rHp <= 0) {
       if (lHp <= 0) {
-        battleLog.push(
-          `Tick ${time} :: ${lName} has been defeated! Victory for ${rName}!`
-        );
+        battleLog.push({
+          text: `Tick ${time} :: ${lName} has been defeated! 🏆Victory for ${rName}🏆!`,
+          color: "green",
+        });
       } else {
-        battleLog.push(
-          `Tick ${time} :: ${rName} has been defeated! Victory for ${lName}!`
-        );
+        battleLog.push({
+          text: `Tick ${time} :: ${rName} has been defeated! 🏆Victory for ${lName}🏆!`,
+          color: "green",
+        });
       }
 
       battleLog = battleLog;
@@ -89,34 +90,37 @@
     // Attack loops
     if (time >= lAttackCount * lSpeed) {
       let calculatedCrit = calculateCrit();
-      let lCrit = calculatedCrit[0];
-      let lCritStatus = calculatedCrit[1];
+      let crit = calculatedCrit[0];
+      let critStatus = calculatedCrit[1];
+      let displayColor = calculatedCrit[2];
 
-      let damage = lAtk * lCrit - rDef;
+      let damage = lAtk * crit - rDef;
       if (damage < 0) {
         damage = 0;
       }
       rHp -= damage;
-      battleLog.push(
-        `Tick ${time} :: ${lName} attacks ${rName} for ${damage} damage ${lCritStatus}`
-      );
+      battleLog.push({
+        text: `Tick ${time} :: ${lName} attacks ${rName} for ${damage} damage ${critStatus}`,
+        color: displayColor,
+      });
       battleLog = battleLog;
       lAttackCount++;
     }
     if (time >= rAttackCount * rSpeed) {
-      //Criticals and misses
       let calculatedCrit = calculateCrit();
       let rCrit = calculatedCrit[0];
       let rCritStatus = calculatedCrit[1];
+      let displayColor = calculatedCrit[2];
 
       let damage = rAtk * rCrit - lDef;
       if (damage < 0) {
         damage = 0;
       }
       lHp -= damage;
-      battleLog.push(
-        `Tick ${time} :: ${rName} attacks ${lName} for ${damage} damage ${rCritStatus}`
-      );
+      battleLog.push({
+        text: `Tick ${time} :: ${rName} attacks ${lName} for ${damage} damage ${rCritStatus}`,
+        color: displayColor,
+      });
       battleLog = battleLog;
       rAttackCount++;
     }
@@ -133,36 +137,48 @@
   }
 
   function calculateCrit() {
+    //Criticals and misses
     let critChance = Math.floor(Math.random() * 10);
     let critStatus = "";
+    let displayColor = "white";
     let crit;
     switch (critChance) {
       case 0:
         crit = 0;
-        critStatus = "-- Missed!";
+        critStatus = "💨 Missed!";
+        displayColor = "yellow";
         break;
       case 9:
         crit = 2;
-        critStatus = "-- Critical hit!";
+        critStatus = "💢 Critical hit!";
+        displayColor = "red";
         break;
       default:
         crit = 1;
     }
-    return [crit, critStatus];
+    return [crit, critStatus, displayColor];
   }
 </script>
-
+<div class="center">
+<button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
+</div>
 <div id="battle-log">
   <!-- Show battle log -->
-  <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
+  <h3>BATTLE LOG</h3>
   <ul id="log">
     {#each battleLog as log}
-      <li>{log}</li>
+      <li style="color:{log.color}">{log.text}</li>
     {/each}
   </ul>
 </div>
 
 <style>
+  ul {
+    list-style-type: "⏱️";
+  }
+  button {
+    margin-bottom: 1em;
+  }
   #battle-log {
     width: 100%;
     height: auto;
@@ -176,5 +192,9 @@
     height: 100%;
     overflow: auto;
     text-align: left;
+  }
+  .center{
+    display: grid;
+    grid-template-columns: auto;
   }
 </style>

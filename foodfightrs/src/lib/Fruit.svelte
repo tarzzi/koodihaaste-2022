@@ -29,8 +29,9 @@
   }
   img {
     border-radius: 50%;
-    /*box-shadow: -15px 15px 1em rgb(90, 90, 90);*/
+    box-shadow: 5px 5px 1em rgb(255, 255, 255), -5px -5px 1em rgb(255, 255, 255);
     width: 152px;
+    height: 152px;
     right: -75px;
     top: -1px;
     position: absolute;
