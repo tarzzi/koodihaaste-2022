@@ -8,22 +8,25 @@
   let battleLog = [];
   let fightStatus = "FIGHT!";
 
-  // Reusable battler object
-  function Battler(fruit) {
-    this.name = fruit.name;
-    this.hp = fruit.stats.hp;
-    this.atk = fruit.stats.atk;
-    this.def = fruit.stats.def;
-    this.speed = fruit.stats.atk + fruit.stats.def + fruit.stats.gre;
-    this.imgSrc = fruit.imgUrl;
-    this.attackCounter = 1;
-  }
-
   let leftChamp;
   let rightChamp;
 
   let red = "";
   let blue = "";
+
+  // Battler object
+  class Battler {
+    constructor(fruit) {
+      this.name = fruit.name;
+      this.hp = fruit.stats.hp;
+      this.atk = fruit.stats.atk;
+      this.def = fruit.stats.def;
+      this.speed = fruit.stats.atk + fruit.stats.def + fruit.stats.gre;
+      this.imgSrc = fruit.imgUrl;
+      this.attackCounter = 1;
+    }
+  }
+
 
   function startBattle() {
     // Assign champions

@@ -1,13 +1,9 @@
 <script>
-  import Title from "./Title.svelte";
-  import { each } from "svelte/internal";
+  import Title from "./lib/Title.svelte";
   import Fruit from "./lib/Fruit.svelte";
   import Battle from "./lib/Battle.svelte";
   let rFruit;
   let lFruit;
-
-  let mainBlue = "#1e90ff";
-  let mainRed = "#ff1e1e";
 
   let indexL = 0;
   let indexR = 0;
