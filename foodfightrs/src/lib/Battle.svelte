@@ -1,8 +1,10 @@
 <script>
+  import Settings from "./Settings.svelte";
+
   // Get selected fruits
   export let lFruit;
   export let rFruit;
-  export let gameTickSetting = 20;
+  export let gameTickSetting = 500;
   let time = 0;
   let timer;
   let battleLog = [];
@@ -13,6 +15,8 @@
 
   let red = "";
   let blue = "";
+
+  let settingsVisible = "hidden";
 
   // Battler object
   class Battler {
@@ -27,7 +31,6 @@
     }
   }
 
-
   function startBattle() {
     // Assign champions
     leftChamp = new Battler(lFruit);
@@ -41,11 +44,25 @@
     battleLog = [];
     battleLog.push({ text: `Tick 00 :: Battle started!` });
 
+    // Same champion recognition
+    if (rightChamp.name === leftChamp.name) {
+      red = "🟥";
+      blue = "🟦";
+    } else {
+      red = "";
+      blue = "";
+    }
+
     // Start battle
     timer = setInterval(() => {
       time++;
       fightStatus = `Fighting ... ${time}`;
       tickBattle();
+      window.scrollTo({
+        left: 0,
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
     }, gameTickSetting);
   }
 
@@ -53,12 +70,6 @@
   function tickBattle() {
     // battler.speed defines when attack happens
     // if timer is over attackspeed * attacks, attack happens
-    // Same champion recognition
-    if (rightChamp.name === leftChamp.name) {
-      red = "🟥";
-      blue = "🟦";
-    }
-
     // Match Ends
     if (leftChamp.hp <= 0 || rightChamp.hp <= 0) {
       if (leftChamp.hp <= 0) {
@@ -81,19 +92,45 @@
     // Attack loops
     if (time >= leftChamp.attackCounter * leftChamp.speed) {
       attack(leftChamp, rightChamp);
-    }
-
-    if (time >= rightChamp.attackCounter * rightChamp.speed) {
+    } else if (time >= rightChamp.attackCounter * rightChamp.speed) {
       attack(rightChamp, leftChamp);
+    } else {
+      if (time % 10 === 0) {
+      battleCast();
+      }
     }
   }
 
-  // Create a reusable attack function from if statement above
+  function battleCast(){
+    let rng = Math.floor(Math.random() * 15) + 1;
+        let cast;
+        let casting = [
+          "The crowd goes bananas!",
+          "This is going to be quite a pickle...",
+          "Someone threw a seed to the battlefield!",
+          "And what is this?",
+          "...",
+          "What a fine day for veggie smash!",
+          "What a crowd today, the stadium is packed to the limits",
+          "The opponent seems quite confident",
+          "*crickets chirping*",
+          "The crowd is cheering for the challenger",
+          "The challenger is looking quite confident",
+          "Did you see that? I sure did!",
+          "We are in for a treat today!",
+          "There it goes!",
+          "Right down the blender!",
+          "We all know what's going to happen next"
+        ];
+        cast = casting[rng];
+        battleLog.push({ text: `Tick ${time} :: ${cast}`, color: "lightslategray" });
+        battleLog = battleLog;
+  }
   function attack(attacker, defender) {
-    let calculatedCrit = calculateCrit();
-    let crit = calculatedCrit[0];
-    let critStatus = calculatedCrit[1];
-    let displayColor = calculatedCrit[2];
+    let crit = calculateCrit();
+    let critCasts = critCasting(crit);
+    let critStatus = critCasts[0];
+    let displayColor = critCasts[1];
 
     let damage = attacker.atk * crit - defender.def;
     if (damage < 0) {
@@ -108,29 +145,42 @@
     attacker.attackCounter = attacker.attackCounter + 1;
   }
 
+
   //Criticals and misses
   function calculateCrit() {
     let critChance = Math.floor(Math.random() * 10);
-    let critStatus = "";
-    let displayColor = "white";
     let crit;
     switch (critChance) {
+      case 0:
+        crit = 0;
+        break;
+      case 9:
+        crit = 2;
+        break;
+      default:
+        crit = 1;
+    }
+    return crit;
+  }
+  function critCasting(crit){
+    let critStatus = "";
+    let displayColor = "white";
+    switch (crit) {
       case 0:
         crit = 0;
         critStatus = "💨 Missed!";
         displayColor = "yellow";
         break;
-      case 9:
+      case 2:
         crit = 2;
         critStatus = "💢 Critical hit!";
         displayColor = "red";
         break;
       default:
-        crit = 1;
+        break;
     }
-    return [crit, critStatus, displayColor];
+    return [critStatus, displayColor];
   }
-
   // Reset game counters
   function resetBattleCounters() {
     let btnActionEl = document.getElementById("btn-action");
@@ -138,19 +188,20 @@
     time = 0;
     fightStatus = "FIGHT!";
   }
+
+  function openSettings() {
+    settingsVisible = "visible";
+    console.log(settingsVisible);
+    settingsVisible = settingsVisible;
+  }
 </script>
 
 <div class="center">
-  <div id="gamespeed">
-    <label>
-      Game speed: {gameTickSetting}ms
-      <input type="range" bind:value={gameTickSetting} min="100" max="1000" />
-    </label>
-  </div>
+  <button on:click={() => openSettings()}>Settings</button>
+  <Settings bind:settingsVisible bind:gameTickSetting />
   <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
 </div>
 <div id="battle-log">
-  <!-- Show battle log -->
   <h3>BATTLE LOG</h3>
   <ul id="log">
     {#each battleLog as log}
@@ -166,7 +217,6 @@
   button {
     margin-bottom: 1em;
   }
-
   button {
     border-radius: 8px;
     color: rgb(78, 78, 78);
@@ -188,18 +238,7 @@
     box-shadow: 2px 2px 2px rgb(156, 156, 156);
     color: rgb(43, 43, 43);
   }
-  /* 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-} */
-  #gamespeed {
-    background-color: #fff;
-    width: auto;
-    margin: 0 auto;
-    margin-bottom: 1em;
-    padding: 20px 30px;
-  }
+
   #battle-log {
     height: auto;
     background-color: #000;
