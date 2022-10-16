@@ -3,8 +3,6 @@
   import { each } from "svelte/internal";
   import Fruit from "./lib/Fruit.svelte";
   import Battle from "./lib/Battle.svelte";
-  let selectedL;
-  let selectedR;
   let rFruit;
   let lFruit;
 
@@ -77,11 +75,9 @@
     },
   ];
 
-  handleChange(0, "Apple");
 
-  lFruit = fruits[0];
-  rFruit = fruits[0];
-  selectedR = fruits[0].name;
+  lFruit = Object.assign({}, fruits[0]);
+  rFruit = Object.assign({}, fruits[0]);
 
   function nextItem(isRight, isMoveRight) {
     if(!isRight){
@@ -96,13 +92,11 @@
         indexL = fruits.length - 1;
       }
     }
-    lFruit = fruits[indexL];
-    selectedL = lFruit.name;
+    lFruit = Object.assign({},fruits[indexL]);
     
     }
     else{
       if (isMoveRight) {
-        console.log("next right");
       indexR++;
       if (indexR > fruits.length - 1) {
         indexR = 0;
@@ -113,44 +107,12 @@
         indexR = fruits.length - 1;
       }
     }
-    console.log("index:",indexR," fruit name:",fruits[indexR]);
-    rFruit = fruits[indexR];
-    selectedR = rFruit.name;
+    rFruit = Object.assign({}, fruits[indexR]);
     
     }
-
   }
 
-  function handleChange(option, value) {
-    let index = fruits.findIndex((object) => {
-      return object.name === value;
-    });
 
-    let fruit = fruits[index].stats;
-    let imgSrc = fruits[index].imgUrl;
-    let speed = fruit.atk + fruit.def + fruit.gre;
-    speed = parseFloat(speed.toFixed(2));
-
-    if (option) {
-      rFruit = [
-        fruit.hp,
-        fruit.atk,
-        fruit.def,
-        speed,
-        imgSrc,
-        fruits[index].name,
-      ];
-    } else {
-      lFruit = [
-        fruit.hp,
-        fruit.atk,
-        fruit.def,
-        speed,
-        imgSrc,
-        fruits[index].name,
-      ];
-    }
-  }
 </script>
 
 <main>
@@ -184,7 +146,7 @@
       />
     </div>
   </div>
-  <Battle {lFruit} {rFruit} />
+  <Battle lFruit={lFruit} rFruit={rFruit} />
 </main>
 
 <style>

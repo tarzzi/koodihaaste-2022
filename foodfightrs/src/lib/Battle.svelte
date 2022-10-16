@@ -1,5 +1,4 @@
 <script>
-
   // Get selected fruits
   export let lFruit;
   export let rFruit;
@@ -9,37 +8,36 @@
   let battleLog = [];
   let fightStatus = "FIGHT!";
 
-  // Get battle stats
+  // Reusable battler object
+  function Battler(fruit) {
+    this.name = fruit.name;
+    this.hp = fruit.stats.hp;
+    this.atk = fruit.stats.atk;
+    this.def = fruit.stats.def;
+    this.speed = fruit.stats.atk + fruit.stats.def + fruit.stats.gre;
+    this.imgSrc = fruit.imgUrl;
+    this.attackCounter = 1;
+  }
+
   let leftChamp;
   let rightChamp;
 
-  let rigthAttackSpeed;
-  let leftAttackSpeed;
-  let lName;
-
-
-  //Attack counters
-
-  let lAttackCount = 1;
-  let rAttackCount = 1;
+  let red = "";
+  let blue = "";
 
   function startBattle() {
-    leftChamp = lFruit;
-    leftAttackSpeed = lFruit.stats.atk + lFruit.stats.def + lFruit.stats.gre;
-    lName = lFruit.name;
+    // Assign champions
+    leftChamp = new Battler(lFruit);
+    rightChamp = new Battler(rFruit);
 
-    rightChamp = rFruit;
-    rigthAttackSpeed = rFruit.stats.atk + rFruit.stats.def + rFruit.stats.gre;
-    rightChamp.name = rFruit.name;
-
-    battleLog = [];
+    // Disable start button
     let btnActionEl = document.getElementById("btn-action");
     btnActionEl.disabled = true;
-    console.log("L hp",leftChamp.stats.hp);
-    battleLog.push({ text: `Tick 00 :: Battle started!` });
-    console.log("Original stats", lFruit, rFruit);
 
-    console.log("ChampionStats", leftChamp, rightChamp);
+    // Start logging
+    battleLog = [];
+    battleLog.push({ text: `Tick 00 :: Battle started!` });
+
     // Start battle
     timer = setInterval(() => {
       time++;
@@ -50,29 +48,27 @@
 
   // Run battle
   function tickBattle() {
-    // leftAttackSpeed and rigthAttackSpeed define when attack happens
-    // if timer is over multiple of speed, attack happens
-
-    let red = "";
-    let blue = "";
-    if (rightChamp.name === lName) {
+    // battler.speed defines when attack happens
+    // if timer is over attackspeed * attacks, attack happens
+    // Same champion recognition
+    if (rightChamp.name === leftChamp.name) {
       red = "🟥";
       blue = "🟦";
     }
+
     // Match Ends
-    if (lFruit.stats.hp <= 0 || rightChamp.stats.hp <= 0) {
-      if (lFruit.stats.hp <= 0) {
+    if (leftChamp.hp <= 0 || rightChamp.hp <= 0) {
+      if (leftChamp.hp <= 0) {
         battleLog.push({
-          text: `Tick ${time} :: ${lName} has been defeated! 🏆Victory for ${blue}${rightChamp.name}🏆!`,
+          text: `Tick ${time} :: ${leftChamp.name} has been defeated! 🏆Victory for ${blue}${rightChamp.name}🏆!`,
           color: "green",
         });
       } else {
         battleLog.push({
-          text: `Tick ${time} :: ${rightChamp.name} has been defeated! 🏆Victory for ${red}${lName}🏆!`,
+          text: `Tick ${time} :: ${rightChamp.name} has been defeated! 🏆Victory for ${red}${leftChamp.name}🏆!`,
           color: "green",
         });
       }
-
       battleLog = battleLog;
       resetBattleCounters();
       clearInterval(timer);
@@ -80,58 +76,37 @@
     }
 
     // Attack loops
-    if (time >= lAttackCount * leftAttackSpeed) {
-      let calculatedCrit = calculateCrit();
-      let crit = calculatedCrit[0];
-      let critStatus = calculatedCrit[1];
-      let displayColor = calculatedCrit[2];
-
-      let damage = lFruit.stats.atk * crit - rightChamp.stats.def;
-      if (damage < 0) {
-        damage = 0;
-      }
-      rightChamp.stats.hp -= damage;
-      let logItem = {
-        text: `Tick ${time} :: ${red}${lName} attacks ${blue}${rightChamp.name} for ${damage} damage ${critStatus}`,
-        color: displayColor,
-      };
-      battleLog = [...battleLog, logItem];
-      lAttackCount++;
+    if (time >= leftChamp.attackCounter * leftChamp.speed) {
+      attack(leftChamp, rightChamp);
     }
-    if (time >= rAttackCount * rigthAttackSpeed) {
-      let calculatedCrit = calculateCrit();
-      let rCrit = calculatedCrit[0];
-      let rCritStatus = calculatedCrit[1];
-      let displayColor = calculatedCrit[2];
 
-      let damage = rightChamp.stats.atk * rCrit - lFruit.stats.def;
-      if (damage < 0) {
-        damage = 0;
-      }
-      lFruit.stats.hp -= damage;
-      let logItem = {
-        text: `Tick ${time} :: ${blue}${rightChamp.name} attacks ${red}${lName} for ${damage} damage ${rCritStatus}`,
-        color: displayColor,
-      };
-      battleLog = [...battleLog, logItem];
-      rAttackCount++;
+    if (time >= rightChamp.attackCounter * rightChamp.speed) {
+      attack(rightChamp, leftChamp);
     }
   }
 
-  // Reset game counters
-  function resetBattleCounters() {
-    let btnActionEl = document.getElementById("btn-action");
-    btnActionEl.disabled = false;
-    lAttackCount = 1;
-    rAttackCount = 1;
-    time = 0;
-    leftChamp = null;
-    rightChamp = null;
-    fightStatus = "FIGHT!";
+  // Create a reusable attack function from if statement above
+  function attack(attacker, defender) {
+    let calculatedCrit = calculateCrit();
+    let crit = calculatedCrit[0];
+    let critStatus = calculatedCrit[1];
+    let displayColor = calculatedCrit[2];
+
+    let damage = attacker.atk * crit - defender.def;
+    if (damage < 0) {
+      damage = 0;
+    }
+    defender.hp -= damage;
+    let logItem = {
+      text: `Tick ${time} :: ${blue}${attacker.name} attacks ${red}${defender.name} for ${damage} damage ${critStatus}`,
+      color: displayColor,
+    };
+    battleLog = [...battleLog, logItem];
+    attacker.attackCounter = attacker.attackCounter + 1;
   }
 
+  //Criticals and misses
   function calculateCrit() {
-    //Criticals and misses
     let critChance = Math.floor(Math.random() * 10);
     let critStatus = "";
     let displayColor = "white";
@@ -152,9 +127,23 @@
     }
     return [crit, critStatus, displayColor];
   }
+
+  // Reset game counters
+  function resetBattleCounters() {
+    let btnActionEl = document.getElementById("btn-action");
+    btnActionEl.disabled = false;
+    time = 0;
+    fightStatus = "FIGHT!";
+  }
 </script>
 
 <div class="center">
+  <div id="gamespeed">
+    <label>
+      Game speed: {gameTickSetting}ms
+      <input type="range" bind:value={gameTickSetting} min="100" max="1000" />
+    </label>
+  </div>
   <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
 </div>
 <div id="battle-log">
@@ -201,7 +190,13 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
-
+  #gamespeed {
+    background-color: #fff;
+    width: auto;
+    margin: 0 auto;
+    margin-bottom: 1em;
+    padding: 20px 30px;
+  }
   #battle-log {
     height: auto;
     background-color: #000;
