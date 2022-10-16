@@ -10,7 +10,6 @@
 
   let fruits = [
     {
-      id: 0,
       name: "Apple",
       stats: {
         hp: 42,
@@ -22,7 +21,6 @@
         "https://www.collinsdictionary.com/images/full/apple_158989157.jpg",
     },
     {
-      id: 1,
       name: "Tomato",
       stats: {
         hp: 36,
@@ -34,7 +32,6 @@
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbpHnwBb8iuyggb-F5VFYa6FR4FgV7ksiveEhC8RVKA&s",
     },
     {
-      id: 2,
       name: "Cucumber",
       stats: {
         hp: 29,
@@ -46,7 +43,6 @@
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-sWAabVWJFCcdZq7CuFb1OcdFYXRFxJSoyg&usqp=CAU",
     },
     {
-      id: 3,
       name: "Banana",
       stats: {
         hp: 25,
@@ -58,7 +54,6 @@
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPla48ZefOGRFbMQwoGg__vKIYxp_bV8XT02C1lRfWN8PyC7vKqJuDH1CN9lEqtW7QKJ8&usqp=CAU",
     },
     {
-      id: 4,
       name: "Pear",
       stats: {
         hp: 46,
@@ -115,9 +110,9 @@
   <Title />
   <div class="grid">
     <div class="card red">
-      <button class="btn-left" on:click={()=>nextItem(0,0)}>←</button>
+      <button class="btn-left red" on:click={()=>nextItem(0,0)}>←</button>
       <h2>{lFruit.name}</h2>
-      <button type="button" class="btn-right" on:click={()=>nextItem(0,1)}>→</button>
+      <button type="button" class="btn-right red" on:click={()=>nextItem(0,1)}>→</button>
       <Fruit
         color="red"
         hp={lFruit.stats.hp}
@@ -127,11 +122,10 @@
         imgSrc={lFruit.imgUrl}
       />
     </div>
-    <div class="card center" style="font-weight:bolder;font-size:28px;">VS</div>
     <div class="card blue">
-      <button class="btn-left" on:click={()=>nextItem(1,0)}>←</button>
+      <button class="btn-left blue" on:click={()=>nextItem(1,0)}>←</button>
       <h2>{rFruit.name}</h2>
-      <button type="button" class="btn-right" on:click={()=>nextItem(1,1)}>→</button>
+      <button type="button" class="btn-right blue" on:click={()=>nextItem(1,1)}>→</button>
       <Fruit
         color="blue"
         hp={rFruit.stats.hp}
@@ -143,6 +137,7 @@
     </div>
   </div>
   <Battle lFruit={lFruit} rFruit={rFruit} />
+  <div class="padding"></div>
 </main>
 
 <style>
@@ -154,10 +149,42 @@
     text-transform: uppercase;
     display: inline;
   }
+  .padding{
+    height: 80px;
+  }
+  .card{
+    position: relative;
+  }
   .grid {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto;
     border: solid 1px black;
+  }
+  .btn-left,  .btn-right{
+    cursor: pointer;
+    padding: 2em 10px;
+  }
+  .btn-left:hover,  .btn-right:hover{
+    text-shadow: 0 0 10px white;
+    background-color: #ffffff44;
+  }
+  .btn-left{
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 40px;
+    font-weight: bolder;
+  }
+  .btn-right{
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    font-size: 40px;
+    font-weight: bolder;
   }
   button{
     padding: 5px 10px;
@@ -176,16 +203,5 @@
     background-color:  var(--mainBlue);
     text-shadow: 0 0 10px black;
     color: white;
-  }
-  .center{
-    color: white;
-    text-shadow: 0 0 10px black;
-    background: linear-gradient(
-    to right,
-    var(--mainRed) 0%,
-    var(--mainRed) 50%,
-    var(--mainBlue) 50%,
-    var(--mainBlue) 100%
-  );
   }
 </style>
