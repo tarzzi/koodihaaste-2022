@@ -8,7 +8,6 @@
 </script>
 
 <div class="fruit">
-  <img class={color} alt="wannabefruit" src={imgSrc} />
   {#if color === "red"}
     <div class="fruit-stats">
       <span class="">🧡</span>
@@ -20,7 +19,9 @@
       <span class="">⚡ </span>
       <span class="">{speed}</span>
     </div>
+    <img class={color} alt="wannabefruit" src={imgSrc} />
   {:else}
+  <img class={color} alt="wannabefruit" src={imgSrc} />
     <div class="fruit-stats right">
       <span class="">{hp}</span>
       <span class="">🧡</span>
@@ -45,15 +46,13 @@
   }
   img {
     border-radius: 50%;
-    box-shadow: 5px 5px 1em rgb(255, 255, 255), -5px -5px 1em rgb(255, 255, 255);
+    box-shadow: 5px 5px 1em rgb(107 107 107 / 70%), -5px -5px 1em rgb(107 107 107 / 47%);
+    background-color: #ffffff;
     width: 105px;
     height: 105px;
-    left: 55%;
-    top: 12px;
-    position: absolute;
     will-change: filter;
     transition: filter 200ms;
-    padding: 4px;
+    padding: 12px;
   }
 
   .blue:hover {
@@ -68,10 +67,15 @@
     filter: drop-shadow(0 0 2em #ff3e00aa);
   }
   .fruit {
-    margin: 0 auto;
-    width: 300px;
+    margin: 0 1em;
     position: relative;
     height: 150px;
+    display: grid;
+    grid-template-columns: auto auto;
+    /* center */
+    align-items: center;
+    justify-content: space-around;
+    gap: 0;
   }
   .fruit-title {
     font-size: 18px;
@@ -83,12 +87,7 @@
     grid-template-columns: auto auto;
     width: 80px;
     padding: 15px;
-    margin-left: 1em;
     gap: 10px 0px;
 
-  }
-  .right{
-    float: right;
-    margin-right: 1em;
   }
 </style>
