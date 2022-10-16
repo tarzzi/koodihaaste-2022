@@ -5,17 +5,33 @@
   export let speed;
   export let color;
   export let imgSrc;
-
-
 </script>
+
 <div class="fruit">
-  <img class="{color}" alt="wannabefruit" src="{imgSrc}" />
-  <p class="fruit-stats">
-    <span class="fruit-stat fruit-stat-hp">HP {hp}</span><br />
-    <span class="fruit-stat fruit-stat-atk">ATK {atk}</span><br />
-    <span class="fruit-stat fruit-stat-def">DEF {def}</span><br />
-    <span class="fruit-stat fruit-stat-spd">SPEED {speed}</span>
-  </p>
+  <img class={color} alt="wannabefruit" src={imgSrc} />
+  {#if color === "red"}
+    <div class="fruit-stats">
+      <span class="">🧡</span>
+      <span class="">{hp}</span>
+      <span class="">🗡️</span>
+      <span class="">{atk}</span>
+      <span class="">🛡️ </span>
+      <span class="">{def}</span>
+      <span class="">⚡ </span>
+      <span class="">{speed}</span>
+    </div>
+  {:else}
+    <div class="fruit-stats right">
+      <span class="">{hp}</span>
+      <span class="">🧡</span>
+      <span class="">{atk}</span>
+      <span class="">🗡️</span>
+      <span class="">{def}</span>
+      <span class="">🛡️ </span>
+      <span class="">{speed}</span>
+      <span class="">⚡ </span>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -23,34 +39,29 @@
     margin: 0;
     padding: 0;
   }
-  p{
-    text-align: left;
-  }
-  span{
-    font-size:20px;
+  span {
+    font-size: 22px;
+    transition: all 500ms;
   }
   img {
     border-radius: 50%;
     box-shadow: 5px 5px 1em rgb(255, 255, 255), -5px -5px 1em rgb(255, 255, 255);
-    width: 152px;
-    height: 152px;
-    right: -25px;
-    top: -1px;
+    width: 105px;
+    height: 105px;
+    left: 55%;
+    top: 12px;
     position: absolute;
     will-change: filter;
     transition: filter 200ms;
+    padding: 4px;
   }
- 
+
   .blue:hover {
     transition: filter 200ms;
     filter: drop-shadow(0 0 2em #646cffaa);
   }
-  .blue div img{
-    right: 0;
-    left: -25px;
-  }
-  .blue div p{
-    text-align:right;
+  .blue div img {
+    left: 10%;
   }
   .red:hover {
     transition: filter 200ms;
@@ -66,13 +77,18 @@
     font-size: 18px;
     font-weight: 800;
   }
-  .fruit-stats{
-    margin-top: 10px;
+  .fruit-stats {
+    display: grid;
+    float: left;
+    grid-template-columns: auto auto;
+    width: 80px;
     padding: 15px;
+    margin-left: 1em;
+    gap: 10px 0px;
+
   }
-  .fruit-stat {
-    text-align: left;
-    font-weight: 600;
-    padding-left: 10px;
+  .right{
+    float: right;
+    margin-right: 1em;
   }
 </style>
