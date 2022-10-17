@@ -18,10 +18,10 @@
         gre: 0.6,
       },
       imgUrl:
-        "https://www.collinsdictionary.com/images/full/apple_158989157.jpg",
+        "../public/apple.gif",
     },
     {
-      name: "Tomato",
+      name: "Pineapple",
       stats: {
         hp: 36,
         atk: 17,
@@ -29,10 +29,10 @@
         gre: 0.6,
       },
       imgUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgbpHnwBb8iuyggb-F5VFYa6FR4FgV7ksiveEhC8RVKA&s",
+        "../public/pineapple.gif",
     },
     {
-      name: "Cucumber",
+      name: "Carrot",
       stats: {
         hp: 29,
         atk: 10,
@@ -40,7 +40,7 @@
         gre: 0.8,
       },
       imgUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-sWAabVWJFCcdZq7CuFb1OcdFYXRFxJSoyg&usqp=CAU",
+        "../public/carrot.gif",
     },
     {
       name: "Banana",
@@ -51,7 +51,7 @@
         gre: 0.2,
       },
       imgUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPla48ZefOGRFbMQwoGg__vKIYxp_bV8XT02C1lRfWN8PyC7vKqJuDH1CN9lEqtW7QKJ8&usqp=CAU",
+        "../public/banana.gif",
     },
     {
       name: "Pear",
@@ -62,7 +62,62 @@
         gre: 0.5,
       },
       imgUrl:
-        "https://img.freepik.com/free-vector/vintage-pear-illustration_53876-112720.jpg?w=2000",
+        "../public/pear.gif",
+    },
+    {
+      name: "Blueberry",
+      stats: {
+        hp: 46,
+        atk: 12,
+        def: 4,
+        gre: 0.5,
+      },
+      imgUrl:
+        "../public/blueberry.gif",
+    },
+    {
+      name: "Lemon",
+      stats: {
+        hp: 46,
+        atk: 12,
+        def: 4,
+        gre: 0.5,
+      },
+      imgUrl:
+        "../public/lemon.gif",
+    },
+    {
+      name: "Pizza",
+      stats: {
+        hp: 46,
+        atk: 12,
+        def: 4,
+        gre: 0.5,
+      },
+      imgUrl:
+        "../public/pizza.gif",
+    },
+    {
+      name: "Peach",
+      stats: {
+        hp: 46,
+        atk: 12,
+        def: 4,
+        gre: 0.5,
+      },
+      imgUrl:
+        "../public/peach.gif",
+    },
+    {
+      name: "Pineapple",
+      stats: {
+        hp: 46,
+        atk: 12,
+        def: 4,
+        gre: 0.5,
+      },
+      imgUrl:
+        "../public/pineapple.gif",
     },
   ];
 
@@ -137,7 +192,10 @@
     </div>
   </div>
   <Battle lFruit={lFruit} rFruit={rFruit} />
-  <div class="padding"></div>
+  <div class="padding">
+    
+  </div>
+  <div style="font-size:12px ;">Gifs by <a href="https://www.flaticon.com/animated-icons" title="pineapple animated icons">by Freepik - Flaticon</a></div>
 </main>
 
 <style>
@@ -203,5 +261,13 @@
     background-color:  var(--mainBlue);
     text-shadow: 0 0 10px black;
     color: white;
+  }
+  .card > button{
+    display: none;
+  }
+  .card:hover button{
+    display: inline-block;
+    transition: background-color 200ms;
+    transition: text-shadow 200ms;
   }
 </style>
