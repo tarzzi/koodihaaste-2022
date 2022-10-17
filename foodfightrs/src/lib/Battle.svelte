@@ -144,8 +144,6 @@
     battleLog = [...battleLog, logItem];
     attacker.attackCounter = attacker.attackCounter + 1;
   }
-
-
   //Criticals and misses
   function calculateCrit() {
     let critChance = Math.floor(Math.random() * 10);

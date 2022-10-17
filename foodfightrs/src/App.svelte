@@ -18,7 +18,7 @@
         gre: 0.6,
       },
       imgUrl:
-        "../public/apple.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/apple.gif",
     },
     {
       name: "Pineapple",
@@ -29,7 +29,7 @@
         gre: 0.6,
       },
       imgUrl:
-        "../public/pineapple.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pineapple.gif",
     },
     {
       name: "Carrot",
@@ -40,7 +40,7 @@
         gre: 0.8,
       },
       imgUrl:
-        "../public/carrot.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/carrot.gif",
     },
     {
       name: "Banana",
@@ -51,7 +51,7 @@
         gre: 0.2,
       },
       imgUrl:
-        "../public/banana.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/banana.gif",
     },
     {
       name: "Pear",
@@ -62,7 +62,7 @@
         gre: 0.5,
       },
       imgUrl:
-        "../public/pear.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pear.gif",
     },
     {
       name: "Blueberry",
@@ -73,7 +73,7 @@
         gre: 0.5,
       },
       imgUrl:
-        "../public/blueberry.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/blueberry.gif",
     },
     {
       name: "Lemon",
@@ -84,7 +84,7 @@
         gre: 0.5,
       },
       imgUrl:
-        "../public/lemon.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/lemon.gif",
     },
     {
       name: "Pizza",
@@ -95,7 +95,7 @@
         gre: 0.5,
       },
       imgUrl:
-        "../public/pizza.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pizza.gif",
     },
     {
       name: "Peach",
@@ -106,7 +106,7 @@
         gre: 0.5,
       },
       imgUrl:
-        "../public/peach.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/peach.gif",
     },
     {
       name: "Pineapple",
@@ -117,7 +117,7 @@
         gre: 0.5,
       },
       imgUrl:
-        "../public/pineapple.gif",
+        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pineapple.gif",
     },
   ];
 
