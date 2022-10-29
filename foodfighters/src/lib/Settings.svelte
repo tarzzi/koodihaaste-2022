@@ -3,7 +3,6 @@
   export let settingsVisible;
 
   function closeSettings() {
-    //isVisible = "hidden";
     settingsVisible = "hidden";
   }
   const explanations = [
@@ -99,7 +98,6 @@
     margin: 0;
   }
   #settings {
-    /*Create modal styles for settings*/
     position: fixed;
     top: 0;
     left: 0;

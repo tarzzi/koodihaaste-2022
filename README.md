@@ -1,6 +1,8 @@
-# Solidabis Koodihaaste 2022  
+# **Solidabiksen Koodihaaste 2022**
 
-## Tehtävä
+## Intro
+
+**Tehtävänanto**:
 
 Tehtävänäsi on toteuttaa ruokarähinä teemainen taistelu, jossa ruoat taistelevat keskenään erilaisilla statseilla.
 
@@ -8,26 +10,55 @@ Tehtävän toteutusta varten sinun tulee hakea eri ruokien ravintosisällöt ja 
 
 Toteutuksessa käytettävät teknologiat ovat vapaasti päätettävissäsi, ja voit toteuttaa tehtävän frontend-, backend- tai fullstack-toteutuksena (kts. palkintoluokat)
 
-## Sovelluksessa tulee olla seuraavat toiminnot
+**Sovelluksessa tulee olla seuraavat toiminnot:**
 
-1. Eri ravintosisältöjen haku ulkoisesta lähteestä (esim. [Fineli API](https://fineli.fi/fineli/fi/ohje/19) tai jokin muu vastaava kuten CSV-tiedosto)
+1. Eri ravintosisältöjen haku ulkoisesta lähteestä (esim. Fineli API tai jokin muu vastaava kuten CSV-tiedosto)
 1. Ravintosisältöjen muuntaminen hahmoluokkiin
 1. Logiikan toteutus kahden ruokahahmon väliseen kaksintaisteluun
 1. Tulosten esitys tekstimuotoisena rajapinta vastauksena tai visuaalisesti Frontendilla
 
-## Statsit  
+**Statsit**:
 
 Perus statsit täytyy löytyä ja olla kaavan mukaan. On kuitenkin lupa lisätä taisteluihin satunnaisuutta.
 
-100 grammaa sisältää:
+## Ratkaisu
 
-- Energia (kcal) = Health Points eli kestopisteet.
-- Hiilihydraatit (g) = Hyökkäysvoima
-- Proteiinit (g) = Puolustusvoima (voidaan käyttää esim. prosentuaalisesti, koska maksimi on tietty 100)
-- Rasvat ei erikseen lisää mitään statsia, mutta enemmän rasvaa = enemmän energiaa = enemmän helaa
-- Hiilihydraattien, rasvojen ja proteiinien yhteenlaskettu grammamäärä = Hitaus. (tai käänteisellä arvolla hyökkäysnopeus)
+### Teknologiat
 
-![esimerkki statsit](https://koodihaaste.solidabis.com/static/media/ruoka_esimerkki.cca98c78150ed5266010.png)
-![esimerkki taistelu](https://koodihaaste.solidabis.com/static/media/taisteluraportti_esimerkki.2ca9e8878ecbc8965605.png)
+**Frontend**  
+Valinta: [Svelte](https://svelte.dev/)  
+Miksi: Mielenkiinto kyseistä frameworkkiä kohtaan.  
 
-**Onnea koodihaasteeseen ja mukavaa (syys)koodailua!**
+**CI/CD**  
+Valinta: [Vercel](https://vercel.com/)  
+Miksi: Ilmainen hostaus, kokemus aiemmista omista projekteista
+
+**"Backend"**  
+Valinta: Json tiedosto githubista  
+Miksi: Laiskuus, ajanpuute
+
+### Pystytys ja käynnistys
+
+#### **Tuotantoympäristö**  
+
+Livenä osoitteessa: [https://koodihaaste-2022.vercel.app/](https://koodihaaste-2022.vercel.app/)
+
+#### **Kehitysympäristö**
+
+1. Kloonaa repo koneellesi
+1. Aja npm install & npm run dev ratkaisun lähdekansiossa ./foodfighters
+
+### Ratkaisun kuvaus
+
+Tappelevat ruoat ovat valittavissa kymmenestä eri vaihtoehdosta, pienistä mustikoista aina pitsaan asti.  
+
+Ruokatiedot on koostettu valmiiksi fruits.json tiedostoon, hyödyntäen [Finelin](https://fineli.fi/fineli/fi/index) elintarviketietokantaa. Tiedoissa on otettu ruoan arvot / 100g. Perusarvot on pyöristetty lähimpiin lukuihin.
+
+**Sovelluksen esimerkkikäyttö:**
+
+1. Käyttäjä avaa sivun
+1. Käyttäjä valitsee itselleen "Championit"
+1. Käyttäjä voi säätää Settings-painikkeen takaa taistelun nopeutta, ja lukemaan samalla kuvakkeiden selvitykset
+1. Käyttäjä painaa FIGHT! - painiketta, joka käynnistää tappelun
+1. Tulokset ilmestyvät BATTLE LOG - osioon sitä mukaa kun tappelu etenee
+1. Tappelun päätyttyä pelin voi käynnistää uudestaan samoilla tai uusilla valinnoilla

@@ -18,7 +18,6 @@
 
   let settingsVisible = "hidden";
 
-  // Battler object
   class Battler {
     constructor(fruit) {
       this.name = fruit.name;
@@ -91,9 +90,9 @@
 
     // Attack loops
     if (time >= leftChamp.attackCounter * leftChamp.speed) {
-      attack(leftChamp, rightChamp);
+      attack(leftChamp, rightChamp, "red");
     } else if (time >= rightChamp.attackCounter * rightChamp.speed) {
-      attack(rightChamp, leftChamp);
+      attack(rightChamp, leftChamp, "blue");
     } else {
       if (time % 10 === 0) {
       battleCast();
@@ -126,7 +125,7 @@
         battleLog.push({ text: `Tick ${time} :: ${cast}`, color: "lightslategray" });
         battleLog = battleLog;
   }
-  function attack(attacker, defender) {
+  function attack(attacker, defender, color) {
     let crit = calculateCrit();
     let critCasts = critCasting(crit);
     let critStatus = critCasts[0];
@@ -137,8 +136,9 @@
       damage = 0;
     }
     defender.hp -= damage;
+      console.log(color);
     let logItem = {
-      text: `Tick ${time} :: ${blue}${attacker.name} attacks ${red}${defender.name} for ${damage} damage ${critStatus}`,
+      text: `Tick ${time <= 9 ? "0"+time : time} :: ${color == 'red' ? red : blue} ${attacker.name} attacks ${color == 'red' ? red : blue} ${defender.name} for ${damage} damage ${critStatus}`,
       color: displayColor,
     };
     battleLog = [...battleLog, logItem];
