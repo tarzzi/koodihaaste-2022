@@ -6,12 +6,26 @@
     //isVisible = "hidden";
     settingsVisible = "hidden";
   }
+  const explanations = [
+    "🧡 = Hitpoints - the amount of damage a food can take (Energy Kcal)",
+    "🗡️ = Attack - attack points (Carbohydrates)",
+    "🛡️ = Defence - reduces damage taken (Proteins)",
+    "⚡ = Speed - how many ticks needed for attack (Carbohydrates + Proteins + Fat)",
+  ];
 </script>
 
 <div id="settings" class={settingsVisible}>
   <div id="gamespeed">
+    <div>
+      <h3>Food Stats</h3>
+      <ul>
+        {#each explanations as expl}
+          <li>{expl}</li>
+        {/each}
+      </ul>
+    </div>
     <label>
-      Game speed<br />
+      <h3>Game speed</h3>
       <input
         type="range"
         bind:value={gameTickSetting}
@@ -33,6 +47,10 @@
 </div>
 
 <style>
+  ul{
+    list-style-type: none;
+    text-align: left;
+  }
   button {
     margin-bottom: 1em;
   }

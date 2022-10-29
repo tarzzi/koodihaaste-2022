@@ -92,14 +92,14 @@
       "imageUrl": "./images/peach.gif"
     },
     {
-      "name": "Pineapple",
+      "name": "Orange",
       "stats": {
-        "energyKcal": 232,
-        "carbohydrate": 11,
+        "energyKcal": 45,
+        "carbohydrate": 9,
         "protein": 0.5,
-        "fat": 0.4
+        "fat": 0.14
       },
-      "imageUrl": "./images/pineapple.gif"
+      "imageUrl": "./images/orange.gif"
     }
   ]
 }
