@@ -18,6 +18,7 @@
   let blue = "";
 
   let settingsVisible = "hidden";
+  let logScrollType = "log_scroll";
 
   class Battler {
     constructor(fruit) {
@@ -54,20 +55,55 @@
       red = "";
       blue = "";
     }
+    if (logScrollType === "log_scroll") {
+      continuousScroll();
+    }
 
     // Start battle
     timer = setInterval(() => {
       time++;
       fightStatus = `Fighting ... ${time}`;
       tickBattle();
+      scrollBattleLog();
+    }, gameTickSetting);
+  }
+
+  let continuousScrollRunning = false;
+  let scroller;
+
+  function continuousScroll() {
+    continuousScrollRunning = true;
+    scroller = setInterval(() => {
+      let out = document.getElementById("log");
+      // allow 1px inaccuracy by adding 1
+      const isScrolledToBottom =
+        out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+      console.log(isScrolledToBottom);
+      // scroll to bottom if isScrolledToBottom is true
+      if (!isScrolledToBottom) {
+        out.scrollTop = out.scrollHeight - out.clientHeight;
+      }
+    }, 500);
+  }
+  function stopScroll() {
+    continuousScrollRunning = false;
+    clearInterval(scroller);
+  }
+
+  function scrollBattleLog() {
+    if (logScrollType === "log_scroll" && !continuousScrollRunning) {
+      setTimeout(() => {
+        let out = document.getElementById("log");
+        out.scrollTop = out.scrollHeight;
+      }, 500);
+    } else {
       window.scrollTo({
         left: 0,
         top: document.body.scrollHeight,
         behavior: "smooth",
       });
-    }, gameTickSetting);
+    }
   }
-
   function initializeHpMeter() {
     leftHpLeft = "❤️❤️❤️❤️❤️";
     rightHpLeft = "❤️❤️❤️❤️❤️";
@@ -108,11 +144,18 @@
 
   // Run battle
   function tickBattle() {
-    // battler.speed defines when attack happens
     updateHpMeter(leftChamp.hp, rightChamp.hp);
     // if timer is over attackspeed * attacks, attack happens
     // Match Ends
     if (leftChamp.hp <= 0 || rightChamp.hp <= 0) {
+      battleLog.push({
+        text: `Tick ${time} :: ################`,
+        color: "green",
+      });
+      battleLog.push({
+        text: `Tick ${time} :: GAME OVER`,
+        color: "green",
+      });
       if (leftChamp.hp <= 0) {
         battleLog.push({
           text: `Tick ${time} :: ${leftChamp.name} has been defeated! 🏆Victory for ${blue}${rightChamp.name}🏆!`,
@@ -124,9 +167,14 @@
           color: "green",
         });
       }
+      battleLog.push({
+        text: `Tick ${time} :: ################`,
+        color: "green",
+      });
       battleLog = battleLog;
       resetBattleCounters();
       clearInterval(timer);
+
       return;
     }
 
@@ -229,6 +277,7 @@
   }
   // Reset game counters
   function resetBattleCounters() {
+    stopScroll();
     let btnActionEl = document.getElementById("btn-action");
     btnActionEl.disabled = false;
     time = 0;
@@ -244,12 +293,12 @@
 
 <div class="center">
   <button class="btn_settings" on:click={() => openSettings()}>Settings</button>
-  <Settings bind:settingsVisible bind:gameTickSetting />
+  <Settings bind:settingsVisible bind:gameTickSetting bind:logScrollType />
   <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
 </div>
 <div id="battle-log">
   <h3>BATTLE LOG</h3>
-  <ul id="log">
+  <ul class={logScrollType} id="log">
     {#each battleLog as log}
       <li style="color:{log.color}">{log.text}</li>
     {/each}
@@ -314,10 +363,15 @@
     margin: 0 auto;
   }
   #log {
-    width: 100%;
+    text-align: left;
+  }
+  .log_scroll {
+    height: 95px;
+    overflow: auto;
+  }
+  .log_full {
     height: 100%;
     overflow: auto;
-    text-align: left;
   }
   .center {
     display: grid;
@@ -346,6 +400,19 @@
     }
     #log {
       padding: 0;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    button {
+      color: rgb(226, 226, 226);
+      background-color: #5f5f5f;
+      border: solid 1px #c5c5c5;
+    }
+    button:active,
+    button:hover {
+      box-shadow: 2px 2px 2px rgb(156, 156, 156);
+      color: rgb(224, 224, 224);
+      border: solid 1px #c5c5c5;
     }
   }
 </style>

@@ -1,7 +1,7 @@
 <script>
   export let gameTickSetting;
   export let settingsVisible;
-
+  export let logScrollType;
   function closeSettings() {
     settingsVisible = "hidden";
   }
@@ -23,19 +23,32 @@
         {/each}
       </ul>
     </div>
-    <label>
-      <h3>Game speed</h3>
-      <input
-        type="range"
-        bind:value={gameTickSetting}
-        min="10"
-        step="10"
-        max="1000"
-      />
-    </label>
-    <p>
-      {gameTickSetting}ms
-    </p>
+    <div class="settings_grid">
+      <div>
+        <label>
+          <h3>Game speed</h3>
+          <input
+            type="range"
+            bind:value={gameTickSetting}
+            min="10"
+            step="10"
+            max="1000"
+          />
+        </label>
+        <p class="nomargintop">
+          {gameTickSetting}ms
+        </p>
+      </div>
+      <div>
+        <label>
+          <h3>Log scroll type</h3>
+          <select bind:value={logScrollType}>
+            <option value="log_scroll" selected>Scroll log</option>
+            <option value="log_full">Full log</option>
+          </select>
+        </label>
+      </div>
+    </div>
     <button
       class="small"
       on:click={() => {
@@ -46,14 +59,25 @@
 </div>
 
 <style>
-  ul{
+  .nomargintop {
+    margin-top: 0;
+  }
+  .settings_grid {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  ul {
     list-style-type: none;
     text-align: left;
   }
   button {
     margin-bottom: 1em;
   }
-
+  select {
+    width: 50%;
+    height: 25%;
+    padding: 8px;
+  }
   .small {
     font-size: 0.8em;
     margin-top: 1em;
@@ -94,9 +118,6 @@
     border: 0.2px solid #010101;
   }
 
-  #gamespeed > p {
-    margin: 0;
-  }
   #settings {
     position: fixed;
     top: 0;
@@ -125,7 +146,41 @@
   input[type="range"] {
     margin-top: 5px;
   }
-  #gamespeed > p {
-    margin: 0;
+
+  @media (max-width: 425px) {
+    .settings_grid {
+      display: grid;
+      grid-template-columns: auto;
+    }
+    select{
+      height: 25px;
+      padding: 2px;
+    }
+    h3{
+      margin: 0;
+      margin-bottom: 5px;
+    }
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    button {
+      color: #e9e9e9;
+    }
+    button:active {
+      color: #e9e9e9;
+    }
+    #gamespeed {
+      background-color: rgb(32, 32, 32);
+      border: 1px solid white;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      background: #a0a0a0;
+      border-radius: 1.3px;
+      border: 0.2px solid #010101;
+    }
   }
 </style>
