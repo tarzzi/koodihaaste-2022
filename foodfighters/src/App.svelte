@@ -2,6 +2,7 @@
   import Title from "./lib/Title.svelte";
   import Fruit from "./lib/Fruit.svelte";
   import Battle from "./lib/Battle.svelte";
+  $: fruitUrls = [];
   let rFruit;
   let lFruit;
   let indexL = 0;
@@ -26,6 +27,9 @@
       };
       fruits.push(singleFruit);
     });
+
+    //preload images for better performance
+    fruitUrls = fruits.map((fruit) => fruit.imgUrl);
     lFruit = Object.assign({}, fruits[0]);
     rFruit = Object.assign({}, fruits[0]);
   }
@@ -61,37 +65,35 @@
       rFruit = Object.assign({}, fruits[indexR]);
     }
   }
-  //preload images for better performance
-  $: fruitUrls = fruits.map((fruit) => fruit.imgUrl);
 </script>
-
- <svelte:head>
-    {#each fruitUrls as image}
-      <link rel="preload" as="image" href={image} />
-    {/each}
+<svelte:head>
+  {#each fruitUrls as image}
+    <link rel="preload" as="image" href={image} />
+  {/each}
 </svelte:head>
 <main>
   <Title />
   <div class="grid">
     <div class="card red">
       <button class="btn-left red" on:click={() => nextItem(0, 0)}>←</button>
-      
+
       {#await promise}
         <p>Loading Champions...</p>
-      {:then data }
-      <h2>{lFruit.name}</h2>
-      <button
-        type="button"
-        class="btn-right red"
-        on:click={() => nextItem(0, 1)}>→</button
-      >
-        <Fruit 
-        color="red"
-        hp={lFruit.stats.hp}
-        atk={lFruit.stats.atk}
-        def={lFruit.stats.def}
-        speed={lFruit.stats.atk + lFruit.stats.def + lFruit.stats.gre}
-        imgSrc={lFruit.imgUrl}/>
+      {:then data}
+        <h2>{lFruit.name}</h2>
+        <button
+          type="button"
+          class="btn-right red"
+          on:click={() => nextItem(0, 1)}>→</button
+        >
+        <Fruit
+          color="red"
+          hp={lFruit.stats.hp}
+          atk={lFruit.stats.atk}
+          def={lFruit.stats.def}
+          speed={lFruit.stats.atk + lFruit.stats.def + lFruit.stats.gre}
+          imgSrc={lFruit.imgUrl}
+        />
       {/await}
     </div>
     <div class="card blue">
@@ -99,23 +101,22 @@
 
       {#await promise}
         <p>Loading Champions...</p>
-      {:then data} 
-      <h2>{rFruit.name}</h2>
-      <button
-        type="button"
-        class="btn-right blue"
-        on:click={() => nextItem(1, 1)}>→</button
-      >
-      <Fruit
-      color="blue"
-      hp={rFruit.stats.hp}
-      atk={rFruit.stats.atk}
-      def={rFruit.stats.def}
-      speed={rFruit.stats.atk + rFruit.stats.def + rFruit.stats.gre}
-      imgSrc={rFruit.imgUrl}
-    /> 
+      {:then data}
+        <h2>{rFruit.name}</h2>
+        <button
+          type="button"
+          class="btn-right blue"
+          on:click={() => nextItem(1, 1)}>→</button
+        >
+        <Fruit
+          color="blue"
+          hp={rFruit.stats.hp}
+          atk={rFruit.stats.atk}
+          def={rFruit.stats.def}
+          speed={rFruit.stats.atk + rFruit.stats.def + rFruit.stats.gre}
+          imgSrc={rFruit.imgUrl}
+        />
       {/await}
-
     </div>
   </div>
   <Battle {lFruit} {rFruit} />
@@ -124,7 +125,8 @@
     Gifs <a
       href="https://www.flaticon.com/animated-icons"
       title="Animated icons">by Freepik - Flaticon</a
-    > | Made by <a href="https://urrio.fi" title="Tarmo's calling card">Tarmo</a>
+    >
+    | Made by <a href="https://urrio.fi" title="Tarmo's calling card">Tarmo</a>
   </div>
 </main>
 
