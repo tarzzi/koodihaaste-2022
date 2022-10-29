@@ -4,7 +4,7 @@
   // Get selected fruits
   export let lFruit;
   export let rFruit;
-  export let gameTickSetting = 500;
+  export let gameTickSetting = 250;
   let time = 0;
   let timer;
   let battleLog = [];
@@ -242,6 +242,8 @@
     color: #fff;
     font-size: 20px;
     padding: 10px;
+    border: 5px #8c8c8c;
+    border-style: ridge;
   }
   #log {
     width: 100%;
