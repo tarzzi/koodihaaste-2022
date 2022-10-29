@@ -26,7 +26,6 @@
       };
       fruits.push(singleFruit);
     });
-    console.log(fruits);
     lFruit = Object.assign({}, fruits[0]);
     rFruit = Object.assign({}, fruits[0]);
   }
@@ -122,10 +121,10 @@
   <Battle {lFruit} {rFruit} />
   <div class="padding" />
   <div style="font-size:12px ;">
-    Gifs by <a
+    Gifs <a
       href="https://www.flaticon.com/animated-icons"
-      title="pineapple animated icons">by Freepik - Flaticon</a
-    >
+      title="Animated icons">by Freepik - Flaticon</a
+    > | Made by <a href="https://urrio.fi" title="Tarmo's calling card">Tarmo</a>
   </div>
 </main>
 
@@ -133,6 +132,16 @@
   :root {
     --mainBlue: #1e90ff;
     --mainRed: #ff1e1e;
+  }
+  a:visited {
+    color: var(--mainBlue);
+  }
+  a {
+    color: var(--mainBlue);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--mainRed);
   }
   h2 {
     text-transform: uppercase;
