@@ -30,4 +30,10 @@
       font-size: 20px;
     }
   }
+  @media (prefers-color-scheme: dark) {
+    h1,h2,h3{
+    text-shadow: 0px 0px 3px rgb(216, 215, 215);
+    }
+
+  }
 </style>
