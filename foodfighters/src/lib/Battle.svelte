@@ -9,10 +9,11 @@
   let timer;
   let battleLog = [];
   let fightStatus = "FIGHT!";
-
+  let battleStarted = false;
   let leftChamp;
   let rightChamp;
-
+  let leftHpLeft;
+  let rightHpLeft;
   let red = "";
   let blue = "";
 
@@ -32,9 +33,11 @@
 
   function startBattle() {
     // Assign champions
+    battleStarted = true;
     leftChamp = new Battler(lFruit);
     rightChamp = new Battler(rFruit);
 
+    initializeHpMeter();
     // Disable start button
     let btnActionEl = document.getElementById("btn-action");
     btnActionEl.disabled = true;
@@ -65,9 +68,48 @@
     }, gameTickSetting);
   }
 
+  function initializeHpMeter() {
+    leftHpLeft = "❤️❤️❤️❤️❤️";
+    rightHpLeft = "❤️❤️❤️❤️❤️";
+  }
+  function updateHpMeter(redHpNow, rightHpNow) {
+    leftHpLeft = getRemainingHp(redHpNow);
+    rightHpLeft = getRemainingHp(rightHpNow);
+  }
+
+  function getRemainingHp(hp) {
+    let hpLeft = "";
+    if (hp <= 0) {
+      hpLeft = "🤍🤍🤍🤍🤍";
+    } else if (hp <= 10) {
+      hpLeft = "💔🤍🤍🤍🤍";
+    } else if (hp <= 20) {
+      hpLeft = "❤️🤍🤍🤍🤍";
+    } else if (hp <= 30) {
+      hpLeft = "❤️💔🤍🤍🤍";
+    } else if (hp <= 40) {
+      hpLeft = "❤️❤️🤍🤍🤍";
+    } else if (hp <= 50) {
+      hpLeft = "❤️❤️💔🤍🤍";
+    } else if (hp <= 60) {
+      hpLeft = "❤️❤️❤️🤍🤍";
+    } else if (hp <= 70) {
+      hpLeft = "❤️❤️❤️💔🤍";
+    } else if (hp <= 80) {
+      hpLeft = "❤️❤️❤️❤️🤍";
+    } else if (hp <= 90) {
+      hpLeft = "❤️❤️❤️❤️💔";
+    } else {
+      hpLeft = "❤️❤️❤️❤️❤️";
+    }
+
+    return hpLeft;
+  }
+
   // Run battle
   function tickBattle() {
     // battler.speed defines when attack happens
+    updateHpMeter(leftChamp.hp, rightChamp.hp);
     // if timer is over attackspeed * attacks, attack happens
     // Match Ends
     if (leftChamp.hp <= 0 || rightChamp.hp <= 0) {
@@ -95,35 +137,38 @@
       attack(rightChamp, leftChamp, "blue");
     } else {
       if (time % 10 === 0) {
-      battleCast();
+        battleCast();
       }
     }
   }
 
-  function battleCast(){
+  function battleCast() {
     let rng = Math.floor(Math.random() * 15) + 1;
-        let cast;
-        let casting = [
-          "The crowd goes bananas!",
-          "This is going to be quite a pickle...",
-          "Someone threw a seed to the battlefield!",
-          "And what is this?",
-          "...",
-          "What a fine day for veggie smash!",
-          "What a crowd today, the stadium is packed to the limits",
-          "The opponent seems quite confident",
-          "*crickets chirping*",
-          "The crowd is cheering for the challenger",
-          "The challenger is looking quite confident",
-          "Did you see that? I sure did!",
-          "We are in for a treat today!",
-          "There it goes!",
-          "Right down the blender!",
-          "We all know what's going to happen next"
-        ];
-        cast = casting[rng];
-        battleLog.push({ text: `Tick ${time} :: ${cast}`, color: "lightslategray" });
-        battleLog = battleLog;
+    let cast;
+    let casting = [
+      "The crowd goes bananas!",
+      "This is going to be quite a pickle...",
+      "Someone threw a seed to the battlefield!",
+      "And what is this?",
+      "...",
+      "What a fine day for veggie smash!",
+      "What a crowd today, the stadium is packed to the limits",
+      "The opponent seems quite confident",
+      "*crickets chirping*",
+      "The crowd is cheering for the challenger",
+      "The challenger is looking quite confident",
+      "Did you see that? I sure did!",
+      "We are in for a treat today!",
+      "There it goes!",
+      "Right down the blender!",
+      "We all know what's going to happen next",
+    ];
+    cast = casting[rng];
+    battleLog.push({
+      text: `Tick ${time} :: ${cast}`,
+      color: "lightslategray",
+    });
+    battleLog = battleLog;
   }
   function attack(attacker, defender, color) {
     let crit = calculateCrit();
@@ -136,9 +181,12 @@
       damage = 0;
     }
     defender.hp -= damage;
-      console.log(color);
     let logItem = {
-      text: `Tick ${time <= 9 ? "0"+time : time} :: ${color == 'red' ? red : blue} ${attacker.name} attacks ${color == 'red' ? red : blue} ${defender.name} for ${damage} damage ${critStatus}`,
+      text: `Tick ${time <= 9 ? "0" + time : time} :: ${
+        color == "red" ? red : blue
+      } ${attacker.name} attacks ${color == "red" ? red : blue} ${
+        defender.name
+      } for ${damage} damage ${critStatus}`,
       color: displayColor,
     };
     battleLog = [...battleLog, logItem];
@@ -160,7 +208,7 @@
     }
     return crit;
   }
-  function critCasting(crit){
+  function critCasting(crit) {
     let critStatus = "";
     let displayColor = "white";
     switch (crit) {
@@ -206,9 +254,28 @@
       <li style="color:{log.color}">{log.text}</li>
     {/each}
   </ul>
+  <div>
+    {#if !leftChamp}
+      <div class="float-left">🟥</div>
+      <div class="float-right">🟦</div>
+    {:else}
+      <div class="float-left">🟥 {leftHpLeft}</div>
+      <div class="float-right">{rightHpLeft}🟦</div>
+    {/if}
+  </div>
+  <div class="clearfix" />
 </div>
 
 <style>
+  .clearfix {
+    clear: both;
+  }
+  .float-left {
+    float: left;
+  }
+  .float-right {
+    float: right;
+  }
   ul {
     list-style-type: "⏱️";
   }
@@ -244,6 +311,7 @@
     padding: 10px;
     border: 5px #8c8c8c;
     border-style: ridge;
+    margin: 0 auto;
   }
   #log {
     width: 100%;
@@ -255,29 +323,28 @@
     display: grid;
     grid-template-columns: auto;
   }
-  .btn_settings{
+  .btn_settings {
     padding: 5px 0;
     font-size: 20px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
   }
   @media (max-width: 425px) {
-    button{
+    button {
       width: 90%;
       border-radius: 0.5em;
       margin-left: auto;
       margin-right: auto;
     }
-    .btn_settings{
+    .btn_settings {
       margin-top: 1em;
       padding: 0.2em 1.2em;
-
     }
     #battle-log {
       font-size: 15px;
       width: auto;
     }
-    #log{
+    #log {
       padding: 0;
     }
   }
