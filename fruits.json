@@ -74,10 +74,10 @@
     {
       "name": "Pizza",
       "stats": {
-        "energyKcal": 173,
+        "energyKcal": 194,
         "carbohydrate": 18,
-        "protein": 8,
-        "fat": 7
+        "protein": 12,
+        "fat": 8
       },
       "imageUrl": "./images/pizza.gif"
     },
