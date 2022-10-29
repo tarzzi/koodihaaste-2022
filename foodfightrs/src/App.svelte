@@ -2,11 +2,23 @@
   import Title from "./lib/Title.svelte";
   import Fruit from "./lib/Fruit.svelte";
   import Battle from "./lib/Battle.svelte";
+  import { onMount } from "svelte";
   let rFruit;
   let lFruit;
 
   let indexL = 0;
   let indexR = 0;
+
+  onMount(async () => {
+    fetch("https://urrio.cloud/api/fruits.json")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   let fruits = [
     {
@@ -17,8 +29,7 @@
         def: 4,
         gre: 0.6,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/apple.gif",
+      imgUrl: "./images/apple.gif",
     },
     {
       name: "Pineapple",
@@ -28,8 +39,7 @@
         def: 5,
         gre: 0.6,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pineapple.gif",
+      imgUrl: "./images/pineapple.gif",
     },
     {
       name: "Carrot",
@@ -39,8 +49,7 @@
         def: 10,
         gre: 0.8,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/carrot.gif",
+      imgUrl: "./images/carrot.gif",
     },
     {
       name: "Banana",
@@ -50,8 +59,7 @@
         def: 7,
         gre: 0.2,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/banana.gif",
+      imgUrl: "./images/banana.gif",
     },
     {
       name: "Pear",
@@ -61,8 +69,7 @@
         def: 4,
         gre: 0.5,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pear.gif",
+      imgUrl: "./images/pear.gif",
     },
     {
       name: "Blueberry",
@@ -72,30 +79,27 @@
         def: 4,
         gre: 0.5,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/blueberry.gif",
+      imgUrl: "./images/blueberry.gif",
     },
     {
       name: "Lemon",
       stats: {
-        hp: 46,
+        hp: 30,
         atk: 12,
         def: 4,
         gre: 0.5,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/lemon.gif",
+      imgUrl: "./images/lemon.gif",
     },
     {
       name: "Pizza",
       stats: {
-        hp: 46,
-        atk: 12,
-        def: 4,
-        gre: 0.5,
+        hp: 221,
+        atk: 10,
+        def: 23,
+        gre: 0.8,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pizza.gif",
+      imgUrl: "./images/pizza.gif",
     },
     {
       name: "Peach",
@@ -105,8 +109,7 @@
         def: 4,
         gre: 0.5,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/peach.gif",
+      imgUrl: "./images/peach.gif",
     },
     {
       name: "Pineapple",
@@ -116,58 +119,55 @@
         def: 4,
         gre: 0.5,
       },
-      imgUrl:
-        "https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/foodfightrs/public/pineapple.gif",
+      imgUrl: "./images/pineapple.gif",
     },
   ];
-
 
   lFruit = Object.assign({}, fruits[0]);
   rFruit = Object.assign({}, fruits[0]);
 
-  function nextItem(isRight, isMoveRight) {
-    if(!isRight){
+  function nextItem(isRightFruit, isMoveRight) {
+    if (!isRightFruit) {
       if (isMoveRight) {
-      indexL++;
-      if (indexL > fruits.length - 1) {
-        indexL = 0;
+        indexL++;
+        if (indexL > fruits.length - 1) {
+          indexL = 0;
+        }
+      } else {
+        indexL--;
+        if (indexL < 0) {
+          indexL = fruits.length - 1;
+        }
       }
+      lFruit = Object.assign({}, fruits[indexL]);
     } else {
-      indexL--;
-      if (indexL < 0) {
-        indexL = fruits.length - 1;
-      }
-    }
-    lFruit = Object.assign({},fruits[indexL]);
-    
-    }
-    else{
       if (isMoveRight) {
-      indexR++;
-      if (indexR > fruits.length - 1) {
-        indexR = 0;
+        indexR++;
+        if (indexR > fruits.length - 1) {
+          indexR = 0;
+        }
+      } else {
+        indexR--;
+        if (indexR < 0) {
+          indexR = fruits.length - 1;
+        }
       }
-    } else {
-      indexR--;
-      if (indexR < 0) {
-        indexR = fruits.length - 1;
-      }
-    }
-    rFruit = Object.assign({}, fruits[indexR]);
-    
+      rFruit = Object.assign({}, fruits[indexR]);
     }
   }
-
-
 </script>
 
 <main>
   <Title />
   <div class="grid">
     <div class="card red">
-      <button class="btn-left red" on:click={()=>nextItem(0,0)}>←</button>
+      <button class="btn-left red" on:click={() => nextItem(0, 0)}>←</button>
       <h2>{lFruit.name}</h2>
-      <button type="button" class="btn-right red" on:click={()=>nextItem(0,1)}>→</button>
+      <button
+        type="button"
+        class="btn-right red"
+        on:click={() => nextItem(0, 1)}>→</button
+      >
       <Fruit
         color="red"
         hp={lFruit.stats.hp}
@@ -178,9 +178,13 @@
       />
     </div>
     <div class="card blue">
-      <button class="btn-left blue" on:click={()=>nextItem(1,0)}>←</button>
+      <button class="btn-left blue" on:click={() => nextItem(1, 0)}>←</button>
       <h2>{rFruit.name}</h2>
-      <button type="button" class="btn-right blue" on:click={()=>nextItem(1,1)}>→</button>
+      <button
+        type="button"
+        class="btn-right blue"
+        on:click={() => nextItem(1, 1)}>→</button
+      >
       <Fruit
         color="blue"
         hp={rFruit.stats.hp}
@@ -191,26 +195,29 @@
       />
     </div>
   </div>
-  <Battle lFruit={lFruit} rFruit={rFruit} />
-  <div class="padding">
-    
+  <Battle {lFruit} {rFruit} />
+  <div class="padding" />
+  <div style="font-size:12px ;">
+    Gifs by <a
+      href="https://www.flaticon.com/animated-icons"
+      title="pineapple animated icons">by Freepik - Flaticon</a
+    >
   </div>
-  <div style="font-size:12px ;">Gifs by <a href="https://www.flaticon.com/animated-icons" title="pineapple animated icons">by Freepik - Flaticon</a></div>
 </main>
 
 <style>
-  :root{
-  --mainBlue: #1e90ff;
-  --mainRed: #ff1e1e;
+  :root {
+    --mainBlue: #1e90ff;
+    --mainRed: #ff1e1e;
   }
-  h2{
+  h2 {
     text-transform: uppercase;
     display: inline;
   }
-  .padding{
+  .padding {
     height: 80px;
   }
-  .card{
+  .card {
     position: relative;
   }
   .grid {
@@ -218,15 +225,17 @@
     grid-template-columns: auto auto;
     border: solid 1px black;
   }
-  .btn-left,  .btn-right{
+  .btn-left,
+  .btn-right {
     cursor: pointer;
     padding: 2em 10px;
   }
-  .btn-left:hover,  .btn-right:hover{
+  .btn-left:hover,
+  .btn-right:hover {
     text-shadow: 0 0 10px white;
     background-color: #ffffff44;
   }
-  .btn-left{
+  .btn-left {
     height: 100%;
     position: absolute;
     top: 50%;
@@ -235,7 +244,7 @@
     font-size: 40px;
     font-weight: bolder;
   }
-  .btn-right{
+  .btn-right {
     height: 100%;
     position: absolute;
     top: 50%;
@@ -244,30 +253,45 @@
     font-size: 40px;
     font-weight: bolder;
   }
-  button{
+  button {
     padding: 5px 10px;
-  font-family: monospace;
-  border: none;
-  background-color: transparent;
-  color: white;
-  font-size: 2em;
+    font-family: monospace;
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 2em;
   }
-  .red{
-    background-color:  var(--mainRed);
+  .red {
+    background-color: var(--mainRed);
     text-shadow: 0 0 10px black;
     color: white;
   }
-  .blue{
-    background-color:  var(--mainBlue);
+  .blue {
+    background-color: var(--mainBlue);
     text-shadow: 0 0 10px black;
     color: white;
   }
-  .card > button{
+  .card > button {
     display: none;
   }
-  .card:hover button{
+  .card:hover button {
     display: inline-block;
     transition: background-color 200ms;
     transition: text-shadow 200ms;
+  }
+
+  @media (max-width: 768px) {
+    .grid {
+      border: none;
+    }
+  }
+
+  @media (max-width: 425px) {
+    .grid {
+      display: inline;
+    }
+    .card > button {
+      display: inline-block;
+    }
   }
 </style>
