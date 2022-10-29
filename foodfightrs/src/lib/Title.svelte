@@ -7,7 +7,6 @@
 </div>
 <style>
   div{
-    background-color: rgba(255, 255, 255, 0.726);
     border-top-left-radius: 25%;
     border-top-right-radius: 25%;
     padding-bottom: 1em;
@@ -15,11 +14,20 @@
   h1 {
     margin-bottom: 0;
     padding-bottom: 0;
+    text-shadow: 0px 1px 4px black;
   }
   h2 {
     text-transform: uppercase;
+    text-shadow: 0px 1px 2px black;
   }
   h3 {
+    margin-top: 0;
     font-style: italic;
+    text-shadow: 0px 1px 4px black;
+  }
+  @media (max-width: 425px) {
+    h2{
+      font-size: 20px;
+    }
   }
 </style>

@@ -195,7 +195,7 @@
 </script>
 
 <div class="center">
-  <button on:click={() => openSettings()}>Settings</button>
+  <button class="btn_settings" on:click={() => openSettings()}>Settings</button>
   <Settings bind:settingsVisible bind:gameTickSetting />
   <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
 </div>
@@ -216,7 +216,6 @@
     margin-bottom: 1em;
   }
   button {
-    border-radius: 8px;
     color: rgb(78, 78, 78);
     border: 1px solid gray;
     padding: 0.6em 1.2em;
@@ -253,5 +252,31 @@
   .center {
     display: grid;
     grid-template-columns: auto;
+  }
+  .btn_settings{
+    padding: 5px 0;
+    font-size: 20px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  @media (max-width: 425px) {
+    button{
+      width: 90%;
+      border-radius: 0.5em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn_settings{
+      margin-top: 1em;
+      padding: 0.2em 1.2em;
+
+    }
+    #battle-log {
+      font-size: 15px;
+      width: auto;
+    }
+    #log{
+      padding: 0;
+    }
   }
 </style>
