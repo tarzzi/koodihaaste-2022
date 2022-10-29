@@ -2,6 +2,20 @@
   export let gameTickSetting;
   export let settingsVisible;
   export let logScrollType;
+  export let scrollEnabled;
+
+  let mediaQueryObj = window.matchMedia("(prefers-color-scheme: dark)");
+  let isDarkMode = mediaQueryObj.matches;
+  const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches === true;
+
+  if (isReduced) {
+    scrollEnabled = "false";
+    console.log("Reduced motion detected");
+  } else {
+    scrollEnabled = "true";
+    console.log("Reduced motion not detected");
+  }
+  console.log(isReduced);
   function closeSettings() {
     settingsVisible = "hidden";
   }
@@ -24,7 +38,7 @@
       </ul>
     </div>
     <div class="settings_grid">
-      <div>
+      <div class="settings_grid_item">
         <label>
           <h3>Game speed</h3>
           <input
@@ -39,12 +53,29 @@
           {gameTickSetting}ms
         </p>
       </div>
-      <div>
+      <div class="settings_grid_item">
         <label>
-          <h3>Log scroll type</h3>
+          <h3>Battle log type</h3>
           <select bind:value={logScrollType}>
             <option value="log_scroll" selected>Scroll log</option>
             <option value="log_full">Full log</option>
+          </select>
+        </label>
+      </div>
+      <div class="settings_grid_item">
+        <h3>Darkmode</h3>
+        <span>
+          Darkmode is currently <b>{isDarkMode ? "ON" : "OFF"}</b><br />
+          <small>Change your
+            browser prefers-color-scheme to change this</small>
+        </span>
+      </div>
+      <div class="settings_grid_item">
+        <label>
+          <h3>Automatic scrolling</h3>
+          <select bind:value={scrollEnabled}>
+              <option value="true" >Enabled</option>
+              <option value="false">Disabled</option>
           </select>
         </label>
       </div>
@@ -59,6 +90,10 @@
 </div>
 
 <style>
+  h3 {
+    margin: 0;
+    margin-bottom: 10px;
+  }
   .nomargintop {
     margin-top: 0;
   }
@@ -75,8 +110,8 @@
   }
   select {
     width: 50%;
-    height: 25%;
-    padding: 8px;
+      height: 25px;
+      padding: 2px;
   }
   .small {
     font-size: 0.8em;
@@ -151,16 +186,19 @@
     .settings_grid {
       display: grid;
       grid-template-columns: auto;
+      gap: 15px;
     }
-    select{
+    .settings_grid_item {
+      margin-bottom: 10px;
+    }
+    select {
       height: 25px;
       padding: 2px;
     }
-    h3{
+    h3 {
       margin: 0;
       margin-bottom: 5px;
     }
-    
   }
 
   @media (prefers-color-scheme: dark) {

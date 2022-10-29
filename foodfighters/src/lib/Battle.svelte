@@ -16,7 +16,7 @@
   let rightHpLeft;
   let red = "";
   let blue = "";
-
+  let scrollEnabled;
   let settingsVisible = "hidden";
   let logScrollType = "log_scroll";
 
@@ -55,7 +55,7 @@
       red = "";
       blue = "";
     }
-    if (logScrollType === "log_scroll") {
+    if (logScrollType === "log_scroll" && scrollEnabled === "true") {
       continuousScroll();
     }
 
@@ -91,17 +91,23 @@
   }
 
   function scrollBattleLog() {
-    if (logScrollType === "log_scroll" && !continuousScrollRunning) {
+    if (
+      logScrollType === "log_scroll" &&
+      !continuousScrollRunning &&
+      scrollEnabled === "true"
+    ) {
       setTimeout(() => {
         let out = document.getElementById("log");
         out.scrollTop = out.scrollHeight;
       }, 500);
     } else {
-      window.scrollTo({
-        left: 0,
-        top: document.body.scrollHeight,
-        behavior: "smooth",
-      });
+      if (scrollEnabled === "true") {
+        window.scrollTo({
+          left: 0,
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
+      }
     }
   }
   function initializeHpMeter() {
@@ -293,7 +299,12 @@
 
 <div class="center">
   <button class="btn_settings" on:click={() => openSettings()}>Settings</button>
-  <Settings bind:settingsVisible bind:gameTickSetting bind:logScrollType />
+  <Settings
+    bind:settingsVisible
+    bind:gameTickSetting
+    bind:logScrollType
+    bind:scrollEnabled
+  />
   <button id="btn-action" on:click={() => startBattle()}>{fightStatus}</button>
 </div>
 <div id="battle-log">
