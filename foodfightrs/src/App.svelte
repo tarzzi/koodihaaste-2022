@@ -9,16 +9,14 @@
   let indexL = 0;
   let indexR = 0;
 
-  onMount(async () => {
-    fetch("https://urrio.cloud/api/fruits.json")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+  function fruits2 (){
+    fetch("https://raw.githubusercontent.com/tarzzi/koodihaaste-2022/main/fruits.json").then((response) => {
+      return response.json();
+    }).then((data) => {
+      console.log(data);
+    })};
+
+  fruits2();
 
   let fruits = [
     {
