@@ -155,8 +155,15 @@
       rFruit = Object.assign({}, fruits[indexR]);
     }
   }
-</script>
+  //preload images for better performance
+  $: fruitUrls = fruits.map((fruit) => fruit.imgUrl);
 
+</script>
+<svelte:head>
+    {#each fruitUrls as image}
+      <link rel="preload" as="image" href={image} />
+    {/each}
+</svelte:head>
 <main>
   <Title />
   <div class="grid">
