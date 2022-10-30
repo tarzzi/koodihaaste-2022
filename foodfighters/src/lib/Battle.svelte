@@ -78,7 +78,6 @@
       // allow 1px inaccuracy by adding 1
       const isScrolledToBottom =
         out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
-      console.log(isScrolledToBottom);
       // scroll to bottom if isScrolledToBottom is true
       if (!isScrolledToBottom) {
         out.scrollTop = out.scrollHeight - out.clientHeight;
@@ -148,10 +147,9 @@
     return hpLeft;
   }
 
-  // Run battle
   function tickBattle() {
     updateHpMeter(leftChamp.hp, rightChamp.hp);
-    // if timer is over attackspeed * attacks, attack happens
+
     // Match Ends
     if (leftChamp.hp <= 0 || rightChamp.hp <= 0) {
       battleLog.push({
@@ -184,7 +182,7 @@
       return;
     }
 
-    // Attack loops
+    // Attacks: if timer is over attackspeed * attacks, attack happens
     if (time >= leftChamp.attackCounter * leftChamp.speed) {
       attack(leftChamp, rightChamp, "red");
     } else if (time >= rightChamp.attackCounter * rightChamp.speed) {
@@ -292,7 +290,6 @@
 
   function openSettings() {
     settingsVisible = "visible";
-    console.log(settingsVisible);
     settingsVisible = settingsVisible;
   }
 </script>

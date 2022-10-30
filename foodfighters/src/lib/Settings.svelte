@@ -10,12 +10,9 @@
 
   if (isReduced) {
     scrollEnabled = "false";
-    console.log("Reduced motion detected");
   } else {
     scrollEnabled = "true";
-    console.log("Reduced motion not detected");
   }
-  console.log(isReduced);
   function closeSettings() {
     settingsVisible = "hidden";
   }
@@ -66,8 +63,7 @@
         <h3>Darkmode</h3>
         <span>
           Darkmode is currently <b>{isDarkMode ? "ON" : "OFF"}</b><br />
-          <small>Change your
-            browser prefers-color-scheme to change this</small>
+          <small>Change your browsers prefers-color-scheme - setting to change this</small>
         </span>
       </div>
       <div class="settings_grid_item">
