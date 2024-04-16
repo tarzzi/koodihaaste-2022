@@ -1,5 +1,5 @@
 # Solidabiksen Koodihaaste 2022
-
+Winner of the Best Frontend in the challenge!
 ## Ratkaisu:  **Food Fighters League**
 
 ### Teknologiat
